@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template
+        id="report_purchaseorder_document"
+        inherit_id="purchase.report_purchaseorder_document"
+    >
+        <xpath expr="//p[@t-field='o.notes']" position="replace">
+            <t t-if="o.view_notes">
+                <span t-field="o.notes"/>
+            </t>
+        </xpath>
+        <xpath expr="//table[1]/tbody/t/tr/t[3]" position="replace">
+            <t t-if="line.display_type == 'line_note'">
+                <t t-if="o.view_notes">
+                    <td colspan="99" id="note">
+                        <span t-field="line.name"/>
+                    </td>
+                </t>
+                <t t-else="">
+                    <td colspan="99" id="note">
+                    
+                    </td>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</odoo>

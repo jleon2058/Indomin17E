@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="action_indomin_report_purchase_requests" model="ir.actions.report">
+        <field name="name">Purchase Request</field>
+        <field name="model">purchase.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ind_purchase_request.report_purchase_request</field>
+        <field name="report_file">ind_purchase_request.report_purchase_request</field>
+        <field name="print_report_name">(object.state in ('draft', 'approved', 'to_approve', 'done') and
+                'RFQ - %s' % (object.name))</field>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

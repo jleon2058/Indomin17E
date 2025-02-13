@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="report_purchase_request">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure" />
+                        <h2>
+                            REQUISICIÓN DE COMPRA
+                            <span t-field="o.name" />
+                        </h2>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-4">
+                                    <strong>SOLICITADO POR:</strong>
+                                    <span t-field="o.requested_by" />
+                                </div>
+                                <div class="col-4">
+                                    <strong>ASIGNADO A:</strong>
+                                    <span t-field="o.assigned_to" />
+                                </div>
+                                <div class="col-4">
+                                    <strong>APROBADO POR:</strong>
+                                    <t t-if="o.approved_by">
+                                        <span t-field="o.approved_by" />
+                                    </t>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <strong>TIPO DE RFQ:</strong>
+                                    <span t-field="o.request_type" />
+                                </div>                            
+                                <div class="col-4">
+                                    <strong>ESTADO DE RFQ:</strong>
+                                    <span t-field="o.state" />
+                                </div>
+                                <div class="col-4">
+                                    <strong>COMPAÑÍA:</strong>
+                                    <span t-field="o.company_id" />
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <strong>DOCUMENTO ORIGEN:</strong>
+                                    <span t-field="o.origin" />
+                                </div>
+                                <div class="col-4">
+                                    <strong>DESCRIPCIÓN:</strong>
+                                    <span t-field="o.description" />
+                                </div>
+                                <div class="col-4">
+                                    <strong>TIPO DE ENTREGA:</strong>
+                                    <span t-field="o.picking_type_id" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <strong>FECHA DE CREACIÓN:</strong>
+                                    <span t-field="o.date_start"/>
+                                </div>
+                                <div class="col-4">
+                                    <strong>FECHA DE APROBACIÓN:</strong>
+                                    <t t-if="o.date_approved">
+                                        <span t-field="o.date_approved"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                        <t t-if="o.line_ids">
+                            <h3>PRODUCTOS</h3>
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>PRODUCTO</strong>
+                                        </th>
+                                        <th>
+                                            <strong>DESCRIPCIÓN</strong>
+                                        </th>
+                                        <th class="text-center" groups="analytic.group_analytic_accounting">
+                                            <strong>CENTRO DE COSTO</strong>
+                                        </th>
+                                        <th class="text-center">
+                                            <strong>CANTIDAD</strong>
+                                        </th>
+                                        <th class="text-center" groups="uom.group_uom">
+                                            <strong>UNIDAD DE MEDIDA</strong>
+                                        </th>
+                                        <th class="text-center">
+                                            <strong>COSTO ESTIMADO</strong>
+                                        </th>
+                                        <th class="text-right">
+                                            <strong>FECHA DE SOLICITUD</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.line_ids" t-as="line_ids">
+                                        <td>
+                                            <span t-field="line_ids.product_id" />
+                                        </td>
+                                        <td>
+                                            <span t-field="line_ids.name" />
+                                        </td>
+                                        <!-- <td class="text-center" groups="analytic.group_analytic_accounting">
+                                            <span t-field="line_ids.analytic_distribution"/>
+                                        </td> -->
+                                        <td class="text-center" groups="analytic.group_analytic_accounting">
+                                            <span t-esc="list(line_ids.analytic_distribution.keys())[0]" />
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="line_ids.product_qty" />
+                                        </td>
+                                        <t>
+                                            <td class="text-center" groups="uom.group_uom">
+                                                <span t-field="line_ids.product_uom_id.name"/>
+                                            </td>
+                                        </t>
+                                        <td class="text-center">
+                                            <span t-field="line_ids.estimated_cost" />
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line_ids.date_required" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        </div>
+                        <div class="oe_structure" />
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
