@@ -33,11 +33,6 @@ class PurchaseRequestLine(models.Model):
         store=True,
         readonly=True
     )
-    
-    planning = fields.Boolean(
-        string='Planning Field',
-        related="request_id.planning",
-    )
 
     request_state = fields.Selection(
         string="Request state",
@@ -55,13 +50,7 @@ class PurchaseRequestLine(models.Model):
                     line.costo_promedio = line.product_id.standard_price * line.product_qty
                 else:
                     line.costo_promedio = 0.0
-
-    @api.onchange('company_id') 
-    def _onchange_company_id(self):
-        # Aplicar un dominio al campo account_analytic_id basado en la compañía seleccionada
-        domain = [('company_id', '=', self.company_id.id)]
-        return {'domain': {'account_analytic_id': domain}} 
-
+    
     def write(self,vals):
         result = super(PurchaseRequestLine,self).write(vals)
         if 'request_state' in vals:

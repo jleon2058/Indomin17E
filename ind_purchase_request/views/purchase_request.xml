@@ -10,37 +10,19 @@
                     name = "print_report_purchase_request"
                     string = "Imprimir RFQ"
                     type = "object"
-                    attrs="{'invisible':[('state', 'not in', ('to_approve', 'approved', 'rejected', 'done'))]}"
                 />
             </xpath>
-            <xpath expr="//field[@name='line_ids']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state','not in', ('draft','to_approve'))]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='product_id']" position="attributes">
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='product_id']" position="attributes">
                 <attribute name="required">1</attribute>
             </xpath>
-            <xpath expr="//field[@name='analytic_distribution']" position="attributes">
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='analytic_distribution']" position="attributes">
                 <attribute name="required">1</attribute>
-            </xpath>
-            <xpath expr="//notebook/page/field/tree/field[2]" position="replace">
-                <field name="name" invisible="1"/>
             </xpath>
             <xpath expr="//form/sheet/group/group[3]" position="after">
                 <group>
-                    <field 
-                        name="planning"
-                        invisible="1"
-                    />
-                    <field
-                        name="request_type"
-                        attrs="{'readonly': [('is_editable','=', False)]}"
-                    />
-                    <field
-                        name="approved_by"
-                    />
-                    <field
-                        name="date_approved"
-                    />
+                    <field name='request_type'/>
+                    <field name='approved_by'/>
+                    <field name='date_approved'/>
                 </group>
             </xpath>
             <xpath expr="//button[@name='button_approved']" position="attributes">
@@ -103,6 +85,7 @@
             </xpath>
         </field>
     </record>
+
     <record id="ind_view_purchase_request_tree" model="ir.ui.view">
         <field name="name">ind.view.purchase.request.tree</field>
         <field name="model">purchase.request</field>
@@ -123,6 +106,7 @@
             </xpath>
         </field>
     </record>
+
     <record id="ind_view_purchase_request_search" model="ir.ui.view">
         <field name="name">ind.purchase.request.list.select</field>
         <field name="model">purchase.request</field>

@@ -105,8 +105,11 @@
                                         <td>
                                             <span t-field="line_ids.name" />
                                         </td>
+                                        <!-- <td class="text-center" groups="analytic.group_analytic_accounting">
+                                            <span t-field="line_ids.analytic_distribution"/>
+                                        </td> -->
                                         <td class="text-center" groups="analytic.group_analytic_accounting">
-                                            <span t-field="line_ids.account_analytic_id.code"/>
+                                            <span t-esc="list(line_ids.analytic_distribution.keys())[0]" />
                                         </td>
                                         <td class="text-center">
                                             <span t-field="line_ids.product_qty" />

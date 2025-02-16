@@ -1,12 +1,5 @@
-from odoo import fields, models, api, _
+from odoo import api,fields,models,_
 from odoo.exceptions import ValidationError
-
-import requests
-from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
-
-import logging
-_logger = logging.getLogger(__name__)
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
@@ -22,11 +15,17 @@ class PurchaseOrder(models.Model):
         default=False,
         index=True,
     )
-    
+
+    # currency_rate = fields.Float(
+    #     string="Tipo de Cambio",
+    #     compute="_compute_currency_rate",
+    #     help="Tipo de cambio según la fecha de la orden y la moneda seleccionada.",
+    # )
+
     inverse_rate = fields.Float("Tipo de cambio", compute="_compute_date_currency_rate", 
                                 compute_sudo=True, store=True, readonly=False, digits=(9, 3))
     fake_inverse_rate = fields.Float("Tipo de cambio falso", store=True, digits=(9,3))
-    
+
     view_notes = fields.Boolean(string='Imprimir notas', default=True)
     
     purchase_request_related = fields.Many2many('purchase.request', string='RFQs Relacionadas', compute='_compute_related_rfqs', copy=False, store=True)
@@ -54,7 +53,21 @@ class PurchaseOrder(models.Model):
             result['views'] = form_view + [(state, view) for state, view in result.get('views', []) if view != 'form']
             result['res_id'] = rfqs.id
         return result
-         
+    
+    # @api.depends('currency_id', 'date_order')
+    # def _compute_currency_rate(self):
+    #     for order in self:
+    #         if order.currency_id != order.company_id.currency_id:
+    #             # Obtenemos el tipo de cambio según la moneda y la fecha de la orden
+    #             order.currency_rate = order.currency_id._get_conversion_rate(
+    #                 order.company_id.currency_id,
+    #                 order.currency_id,
+    #                 order.company_id,
+    #                 order.date_order or fields.Date.today()
+    #             )
+    #         else:
+    #             order.currency_rate = 1.0  # No hay cambio si la moneda es la misma que la de la compañía
+
     def button_update_currency_rate(self):
         datetime_today = datetime.now()
         datetime_today = int(datetime_today.strftime('%Y%m%d%H%M%S'))
@@ -89,7 +102,8 @@ class PurchaseOrder(models.Model):
                     raise ValidationError(_('No se ha encontrado tipo de cambio a la fecha para la OC: %s') % record.name)
             else:
                 record.inverse_rate = 0
-    
+
+
     @api.depends('purchase_request_related')
     def _compute_rfq_count(self):
         for rfq in self:
@@ -100,12 +114,6 @@ class PurchaseOrder(models.Model):
         for order in self:
             rfqs = order.order_line.mapped('purchase_request_lines.request_id')
             order.purchase_request_related = [(6, 0, rfqs.ids)]
-            
-    @api.onchange('company_id') 
-    def _onchange_company_id(self):
-        # Aplicar un dominio al campo account_analytic_id basado en la compañía seleccionada
-        domain = [('company_id', '=', self.company_id.id)]
-        return {'domain': {'project_id': domain}}
 
     def button_draft(self):
         for order in self:
@@ -121,53 +129,34 @@ class PurchaseOrder(models.Model):
                     else:
                         self.write({'state': 'draft'})
                         return {}
-
-class Currency(models.Model):
-    _inherit = "res.currency.rate"
     
-    @api.model
-    def create_currency_rate_record(self):
-        # Obtener las monedas y las compañías
-        usd_currency = self.env.ref('base.USD')
-        companies = self.env['res.company'].sudo().search([])
+    taxes_id = fields.Many2many('account.tax', string="Impuestos")
 
-        url = 'https://www.sbs.gob.pe/app/pp/SISTIP_PORTAL/Paginas/Publicacion/TipoCambioPromedio.aspx'
-        response = requests.get(url, headers={'Cache-Control': 'no-cache'})
+    @api.onchange('taxes_id')
+    def _onchange_taxes_id(self):
+        # Al cambiar los impuestos generales, se actualizan los impuestos de las líneas
+        for order in self:
+            if order.taxes_id:
+                for line in order.order_line:
+                    line.taxes_id = [(6, 0, order.taxes_id.ids)]
 
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
-            table = soup.find('table', {'id': 'ctl00_cphContent_rgTipoCambio_ctl00'})
-            if not table:
-                raise ValidationError("No se pudo encontrar la tabla de tipo de cambio en la página de SBS.")
-            
-            rows = table.find_all('tr')
-
-            # Ajustar la fecha actual
-            today = datetime.now() + timedelta(days=1)
-            today_str = today.strftime('%d/%m/%Y')
-
-            for row in rows:
-                columns = row.find_all('td')
-                if len(columns) >= 3 and today_str in columns[0].text:
-                    tipo_cambio_venta = float(columns[2].text.replace(',', '.'))
-
-                    for company in companies:
-                        existing_record = self.env['res.currency.rate'].sudo().search([
-                            ('name', '=', fields.Date.today()),
-                            ('currency_id', '=', usd_currency.id),
-                            ('company_id', '=', company.id),
-                        ])
-
-                        if not existing_record:
-                            currency_rate_data = {
-                                'name': fields.Date.today(),
-                                'rate': tipo_cambio_venta,
-                                'currency_id': usd_currency.id,
-                                'company_id': company.id,
-                            }
-                            self.env['res.currency.rate'].create(currency_rate_data)
-                        else:
-                            _logger.info("Ya existe un registro para la fecha y empresa actual. No se creará un nuevo tipo de cambio.")
-                    break
-        else:
-            _logger.info(f"Error al realizar la solicitud GET. Código de estado: {response.status_code}")
+    def button_confirm(self):
+        # Llamar al método original para confirmar la orden de compra
+        res = super(PurchaseOrder, self).button_confirm()
+        
+        # Recorrer las órdenes y sus líneas para actualizar los movimientos de inventario
+        for order in self:
+            for line in order.order_line:
+                # Verificar si la línea de pedido tiene una distribución analítica
+                if line.analytic_distribution:
+                    # Buscar movimientos de inventario generados para esta línea de pedido
+                    stock_moves = self.env['stock.move'].search([
+                        ('purchase_line_id', '=', line.id)
+                    ])
+                    
+                    # Actualizar cada movimiento con la misma distribución analítica
+                    stock_moves.write({
+                        'analytic_distribution': line.analytic_distribution
+                    })
+        
+        return res

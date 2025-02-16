@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-
 <odoo>
     <record id="ind_view_purchase_request_line_tree" model="ir.ui.view">
         <field name="name">ind.purchase.request.line.tree</field>
@@ -38,6 +37,7 @@
             </xpath>
         </field>
     </record>
+
     <record id="ind_view_purchase_request_line_form" model="ir.ui.view">
         <field name="name">ind.purchase.request.line.form</field>
         <field name="model">purchase.request.line</field>

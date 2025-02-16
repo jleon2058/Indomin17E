@@ -17,7 +17,7 @@ class PurchaseRequest(models.Model):
         default = False,
         index = True
     )
-    
+
     @api.constrains('request_type')
     def _check_request_type_for_group(self):
         # Obtener el ID del grupo res_group_usuario_RFQ
@@ -39,17 +39,11 @@ class PurchaseRequest(models.Model):
     )
 
     date_start = fields.Date(
-        string="Creation date",
+        string="Fecha de Creación",
         help="Date when the user initiated the request.",
         default=fields.Date.context_today,
         tracking=True,
         readonly=True
-    )
-                    
-    planning = fields.Boolean(
-        string='Planning Field',
-        comodel_name="res.users",
-        related="requested_by.planning",
     )
     observations = fields.Char(
         string="Observaciones",
@@ -78,7 +72,7 @@ class PurchaseRequest(models.Model):
         tracking = True,
         index = True,
     )
-    
+
     assigned_to = fields.Many2one(
         comodel_name="res.users",
         string="Approver",
@@ -115,7 +109,7 @@ class PurchaseRequest(models.Model):
     def _compute_costo_promedio(self):
         for rec in self:
             rec.costo_promedio_total = sum(rec.line_ids.mapped("costo_promedio"))
-    
+
     @api.depends('line_ids.product_id.detailed_type')
     def button_to_approve(self):
         for request in self:
@@ -127,12 +121,12 @@ class PurchaseRequest(models.Model):
 
             self.to_approve_allowed_check()
             return self.write({"state": "to_approve"})
-
+        
     def button_approved(self):
         self.approved_by = self.env.user
         self.date_approved = fields.Datetime.now()
         super(PurchaseRequest, self).button_approved()
-    
+
     @api.depends('line_ids.request_state')
     def button_draft(self):
         for request in self:
@@ -144,16 +138,16 @@ class PurchaseRequest(models.Model):
                 super(PurchaseRequest, self).button_draft()
             else:
                 raise ValidationError("El requerimiento esta asociado a una OC no cancelada")
-
+    
     def print_report_purchase_request(self):
         return self.env.ref('ind_purchase_request.action_indomin_report_purchase_requests').report_action(self)
-
+    
     @api.depends('line_ids.request_state')
     def rechazar_requerimiento(self):
         for request in self:
             if all(req.request_state=='rejected' for req in request.line_ids):
                 request.state='rejected'
-    
+
     @api.depends('line_ids.request_state')
     def button_rejected(self):
         for request in self:
@@ -163,14 +157,14 @@ class PurchaseRequest(models.Model):
                 return self.write({"state": "rejected"})
             else:
                 raise ValidationError("El requerimiento esta asociado a una OC no cancelada")
-            
+
     def copy(self, default=None):
         if default is None:
             default = {}
 
         for line in self.line_ids:
-            if not line.account_analytic_id:
+            if not line.analytic_distribution:
                 raise UserError("No se puede duplicar el requerimiento de compra porque contiene líneas sin centro de costos.")
-
+            
         default['date_start'] = fields.Date.context_today(self)
         return super(PurchaseRequest, self).copy(default)
