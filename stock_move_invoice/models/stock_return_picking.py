@@ -19,5 +19,16 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 ################################################################################
-from . import models
-from . import wizard
+from odoo import models
+
+
+class StockReturnInvoicePicking(models.TransientModel):
+    _inherit = 'stock.return.picking'
+
+    def _create_returns(self):
+        """in this function the picking is marked as return"""
+        new_picking, pick_type_id = \
+            super(StockReturnInvoicePicking, self)._create_returns()
+        picking = self.env['stock.picking'].browse(new_picking)
+        picking.write({'is_return': True})
+        return new_picking, pick_type_id

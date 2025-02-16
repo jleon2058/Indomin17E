@@ -1,38 +1,37 @@
-.. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
-    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.svg
+    :target: https://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
+
 Invoice From Stock Picking
 ==========================
 * Enables the option for creating invoice from stock picking
 
-Installation
-============
-- www.odoo.com/documentation/16.0/setup/install.html
-- Install our custom addon
-
-License
--------
-GNU AFFERO GENERAL PUBLIC LICENSE, Version 3 (AGPLv3)
-(http://www.gnu.org/licenses/agpl.html)
+Configuration
+=============
+* No additional configurations needed
 
 Company
 -------
 * `Cybrosys Techno Solutions <https://cybrosys.com/>`__
 
+License
+-------
+General Public License, Version 3 (AGPL v3).
+(https://www.gnu.org/licenses/agpl-3.0-standalone.html)
+
 Credits
 -------
-* Developer:
-   V13 Sayooj A O
-   V14 Minhaj T
-   V15 Tintuk Tomin
+* Developer: (V17) Mruthul Raj, Contact:odoo@cybrosys.com
 
 Contacts
 --------
 * Mail Contact : odoo@cybrosys.com
+* Website : https://cybrosys.com
 
 Bug Tracker
 -----------
-Bugs are tracked on GitHub Issues. In case of trouble, please check there if your issue has already been reported.
+Bugs are tracked on GitHub Issues. In case of trouble, please check there if
+your issue has already been reported.
 
 Maintainer
 ==========
@@ -40,7 +39,6 @@ Maintainer
    :target: https://cybrosys.com
 
 This module is maintained by Cybrosys Technologies.
-
 For support and more information, please visit `Our Website <https://cybrosys.com/>`__
 
 Further information

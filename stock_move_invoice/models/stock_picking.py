@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-#############################################################################
+################################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2020-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: Sayooj A O(<https://www.cybrosys.com>)
+#    Copyright (C) 2024-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author:  Mruthul Raj (odoo@cybrosys.com)
 #
 #    You can modify it under the terms of the GNU AFFERO
 #    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
@@ -18,22 +18,28 @@
 #    (AGPL v3) along with this program.
 #    If not, see <http://www.gnu.org/licenses/>.
 #
-#############################################################################
+################################################################################
 from odoo import fields, models, _
 from odoo.exceptions import UserError
 
 
 class StockPicking(models.Model):
-    """Inheriting model stock.picking"""
     _inherit = 'stock.picking'
 
     invoice_count = fields.Integer(string='Invoices',
-                                   compute='_compute_invoice_count')
-    operation_code = fields.Selection(related='picking_type_id.code')
-    is_return = fields.Boolean()
+                                   compute='_compute_invoice_count',
+                                   help='The number of associated invoices for '
+                                        'this picking.')
+    operation_code = fields.Selection(related='picking_type_id.code',
+                                      string='Operation Code',
+                                      help='The code related to the operation '
+                                           'of this picking.')
+    is_return = fields.Boolean(string='Return',
+                               help='Indicates whether this picking is a '
+                                    'return.')
 
     def _compute_invoice_count(self):
-        """This compute function used to count the number of invoice for
+        """This computes function used to count the number of invoice for
         the picking"""
         for picking_id in self:
             move_ids = picking_id.env['account.move'].search(
@@ -43,7 +49,7 @@ class StockPicking(models.Model):
             else:
                 self.invoice_count = 0
 
-    def create_invoice(self):
+    def action_create_invoice(self):
         """This is the function for creating customer invoice
         from the picking"""
         for picking_id in self:
@@ -57,35 +63,43 @@ class StockPicking(models.Model):
                     raise UserError(
                         _("Please configure the journal from settings"))
                 invoice_line_list = []
-                for move_ids_without_package in picking_id.move_ids_without_package:
+                for move_ids_without_package in picking_id. \
+                        move_ids_without_package:
                     vals = (0, 0, {
                         'name': move_ids_without_package.description_picking,
                         'product_id': move_ids_without_package.product_id.id,
-                        'price_unit': move_ids_without_package.product_id.lst_price,
-                        'account_id': move_ids_without_package.product_id.property_account_income_id.id if
-                        move_ids_without_package.product_id.property_account_income_id
-                        else move_ids_without_package.product_id.categ_id.property_account_income_categ_id.id,
+                        'price_unit':
+                            move_ids_without_package.product_id.lst_price,
+                        'account_id':
+                            move_ids_without_package.product_id.
+                            property_account_income_id.id if
+                            move_ids_without_package.
+                            product_id.property_account_income_id
+                            else move_ids_without_package.
+                            product_id.categ_id.
+                            property_account_income_categ_id.id,
                         'tax_ids': [(6, 0, [
                             picking_id.company_id.account_sale_tax_id.id])],
-                        'quantity': move_ids_without_package.quantity_done,
+                        'quantity': move_ids_without_package.quantity,
                     })
                     invoice_line_list.append(vals)
-                invoice = picking_id.env['account.move'].create({
-                    'move_type': 'out_invoice',
-                    'invoice_origin': picking_id.name,
-                    'invoice_user_id': current_user,
-                    'narration': picking_id.name,
-                    'partner_id': picking_id.partner_id.id,
-                    'currency_id': picking_id.env.user.company_id.currency_id.id,
-                    'journal_id': int(customer_journal_id),
-                    'payment_reference': picking_id.name,
-                    'picking_id': picking_id.id,
-                    'invoice_line_ids': invoice_line_list,
-                    'transfer_ids': self
-                })
-                return invoice
+                    invoice = picking_id.env['account.move'].create({
+                        'move_type': 'out_invoice',
+                        'invoice_origin': picking_id.name,
+                        'invoice_user_id': current_user,
+                        'narration': picking_id.name,
+                        'partner_id': picking_id.partner_id.id,
+                        'currency_id':
+                            picking_id.env.user.company_id.currency_id.id,
+                        'journal_id': int(customer_journal_id),
+                        'payment_reference': picking_id.name,
+                        'picking_id': picking_id.id,
+                        'invoice_line_ids': invoice_line_list,
+                        'transfer_ids': self
+                    })
+                    return invoice
 
-    def create_bill(self):
+    def action_create_bill(self):
         """This is the function for creating vendor bill
                 from the picking"""
         for picking_id in self:
@@ -114,7 +128,7 @@ class StockPicking(models.Model):
                             property_account_income_categ_id.id,
                         'tax_ids': [(6, 0, [
                             picking_id.company_id.account_purchase_tax_id.id])],
-                        'quantity': move_ids_without_package.quantity_done,
+                        'quantity': move_ids_without_package.quantity,
                     })
                     invoice_line_list.append(vals)
                     invoice = picking_id.env['account.move'].create({
@@ -133,7 +147,7 @@ class StockPicking(models.Model):
                     })
                     return invoice
 
-    def create_customer_credit(self):
+    def action_create_customer_credit(self):
         """This is the function for creating customer credit note
                 from the picking"""
         for picking_id in self:
@@ -162,7 +176,7 @@ class StockPicking(models.Model):
                             property_account_income_categ_id.id,
                         'tax_ids': [(6, 0, [
                             picking_id.company_id.account_sale_tax_id.id])],
-                        'quantity': move_ids_without_package.quantity_done,
+                        'quantity': move_ids_without_package.quantity,
                     })
                     invoice_line_list.append(vals)
                     invoice = picking_id.env['account.move'].create({
@@ -181,7 +195,7 @@ class StockPicking(models.Model):
                     })
                     return invoice
 
-    def create_vendor_credit(self):
+    def action_create_vendor_credit(self):
         """This is the function for creating refund
                 from the picking"""
         for picking_id in self:
@@ -209,7 +223,7 @@ class StockPicking(models.Model):
                             property_account_income_categ_id.id,
                         'tax_ids': [(6, 0, [
                             picking_id.company_id.account_purchase_tax_id.id])],
-                        'quantity': move_ids_without_package.quantity_done,
+                        'quantity': move_ids_without_package.quantity,
                     })
                     invoice_line_list.append(vals)
                     invoice = picking_id.env['account.move'].create({
@@ -279,7 +293,7 @@ class StockPicking(models.Model):
                                 'tax_ids': [(6, 0, [picking_id.company_id.
                                              account_purchase_tax_id.id])],
                                 'quantity':
-                                    move_ids_without_package.quantity_done,
+                                    move_ids_without_package.quantity,
                             })
                             invoice_line_list.append(vals)
                     invoice = self.env['account.move'].create({
@@ -331,7 +345,7 @@ class StockPicking(models.Model):
                                 'tax_ids': [(6, 0, [picking_id.company_id.
                                              account_purchase_tax_id.id])],
                                 'quantity':
-                                    move_ids_without_package.quantity_done,
+                                    move_ids_without_package.quantity,
                             })
                             bill_line_list.append(vals)
                     invoice = self.env['account.move'].create({
@@ -354,16 +368,3 @@ class StockPicking(models.Model):
         else:
             raise UserError(
                 _("Please select single type transfer"))
-
-
-class StockReturnInvoicePicking(models.TransientModel):
-    _inherit = 'stock.return.picking'
-
-    def _create_returns(self):
-        """in this function the picking is marked as return"""
-
-        new_picking, pick_type_id = \
-            super(StockReturnInvoicePicking, self)._create_returns()
-        picking = self.env['stock.picking'].browse(new_picking)
-        picking.write({'is_return': True})
-        return new_picking, pick_type_id
