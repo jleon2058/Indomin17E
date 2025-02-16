@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: purchase-workflow (10.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-17 03:38+0000\n"
-"PO-Revision-Date: 2024-06-27 09:35+0000\n"
+"PO-Revision-Date: 2024-06-11 14:36+0000\n"
 "Last-Translator: jakobkrabbe <jakob@syscare.se>\n"
 "Language-Team: Swedish (http://www.transifex.com/oca/OCA-purchase-"
 "workflow-10-0/language/sv/)\n"
@@ -121,7 +121,7 @@ msgid ""
 "<strong>Request Reference:</strong>\n"
 "                                <br/>"
 msgstr ""
-"<strong>Förfrågans referens:</strong>\n"
+"<strong>Förfrågansreferens:</strong>\n"
 "                                <br/>"
 
 #. module: purchase_request
@@ -221,10 +221,6 @@ msgstr "Tilldelningar"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__analytic_distribution
-msgid "Analytic"
-msgstr "Objekt"
-
-#. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 msgid "Analytic Distribution"
 msgstr "Objekt distribution"
@@ -303,7 +299,7 @@ msgstr "Avbruten"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 msgid "Cancelled Quantity"
-msgstr "Annullerad kvantitet"
+msgstr "Avbruten kvantitet"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__product_uom_category_id
@@ -351,7 +347,7 @@ msgstr "Kopiera beskrivningar till nytt PO"
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_line_make_purchase_order
 msgid "Create RFQ"
-msgstr "Skapa offertförfrågan"
+msgstr "Skapa RFQ"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_stock_move__created_purchase_request_line_id
@@ -406,7 +402,7 @@ msgstr "Beskrivnig"
 #: code:addons/purchase_request/models/purchase_request_line.py:0
 #, python-format
 msgid "Detailed Line"
-msgstr "Detaljerad rad"
+msgstr "Detaljerad linje"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__display_name
@@ -548,18 +544,6 @@ msgid "If checked, some messages have a delivery error."
 msgstr "Om kryssrutan är markerad får vissa meddelanden ett leveransfel."
 
 #. module: purchase_request
-#: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
-#: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
-#: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_search
-msgid "In Progress"
-msgstr ""
-
-#. module: purchase_request
-#: model:ir.model.fields.selection,name:purchase_request.selection__purchase_request__state__in_progress
-msgid "In progress"
-msgstr ""
-
-#. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__is_editable
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__is_editable
 msgid "Is Editable"
@@ -582,15 +566,6 @@ msgid "Items"
 msgstr "Föremål"
 
 #. module: purchase_request
-#: model:ir.model.fields,field_description:purchase_request.field_purchase_request____last_update
-#: model:ir.model.fields,field_description:purchase_request.field_purchase_request_allocation____last_update
-#: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line____last_update
-#: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order____last_update
-#: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order_item____last_update
-msgid "Last Modified on"
-msgstr "Senast ändrad den"
-
-#. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__write_uid
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_allocation__write_uid
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__write_uid
@@ -611,13 +586,7 @@ msgstr "Senast uppdaterad"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
 msgid "Lines"
-msgstr "Rader"
-
-#. module: purchase_request
-#: model:ir.model.fields,field_description:purchase_request.field_purchase_request__message_main_attachment_id
-#: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__message_main_attachment_id
-msgid "Main Attachment"
-msgstr "Huvudfäste"
+msgstr "Linjer"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_order_line_form2_sub
@@ -627,7 +596,7 @@ msgstr "Manuella fakturor"
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order__sync_data_planned
 msgid "Match existing PO lines by Scheduled Date"
-msgstr "Matcha befintliga inköpsorderrader efter planerat datum"
+msgstr "Matcha befintliga PO-rader efter planerat datum"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__message_has_error
@@ -691,7 +660,7 @@ msgstr "Nästa aktivitetstyp"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 msgid "No RFQ or Purchase has been created"
-msgstr "Ingen offertförfrågan eller något inköp har skapats"
+msgstr "Ingen RFQ eller något inköp har skapats"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__message_needaction_counter
@@ -743,13 +712,13 @@ msgstr "Orderpunkt"
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__description
 msgid "PR Description"
-msgstr "PR Beskrivnig"
+msgstr "PR-beskrivnig"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__pending_qty_to_receive
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 msgid "Pending Qty to Receive"
-msgstr "Avvaktande offertförfrågan att ta emot"
+msgstr "Avvaktande kvantitet att ta emot"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
@@ -796,7 +765,7 @@ msgstr "Produkt"
 #. module: purchase_request
 #: model:ir.model,name:purchase_request.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
-msgstr "Produktflyttar (Transaktioner)"
+msgstr "Produkttransaktioner (Stock Move Line)"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.report_purchase_request
@@ -817,7 +786,7 @@ msgstr "Köpet bekräftat"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 msgid "Purchase Done"
-msgstr "Inköp utfört"
+msgstr "Köp utfört"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_allocation__purchase_line_id
@@ -861,21 +830,21 @@ msgstr "Inköpsorder"
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_search
 msgid "Purchase Request"
-msgstr "Begäran om köp"
+msgstr "Inköpförfrågan"
 
 #. module: purchase_request
 #. odoo-python
 #: code:addons/purchase_request/models/purchase_order.py:0
 #, python-format
 msgid "Purchase Request %s has already been completed"
-msgstr "Inköpsbegäran %s har redan slutförts"
+msgstr "Inköpsförfrågan %s har redan slutförts"
 
 #. module: purchase_request
 #. odoo-python
 #: code:addons/purchase_request/wizard/purchase_request_line_make_purchase_order.py:0
 #, python-format
-msgid "Purchase Request %s is not approved or in progress"
-msgstr ""
+msgid "Purchase Request %s is not approved"
+msgstr "Inköpsförfrågan %s är inte godkänd"
 
 #. module: purchase_request
 #: model:ir.model,name:purchase_request.model_purchase_request_allocation
@@ -883,11 +852,10 @@ msgstr ""
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__purchase_request_allocation_ids
 #: model:ir.model.fields,field_description:purchase_request.field_stock_move__purchase_request_allocation_ids
 msgid "Purchase Request Allocation"
-msgstr "Tilldelning av inköpsbegäran"
+msgstr "Tilldelning av inköpsförfrågan"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_move_form
-#: model_terms:ir.ui.view,arch_db:purchase_request.view_picking_form
 msgid "Purchase Request Allocations"
 msgstr "Tilldelningar för inköpsbegäran"
 
@@ -902,17 +870,17 @@ msgstr "Inköpsförfrågningsrad"
 #. module: purchase_request
 #: model:ir.model,name:purchase_request.model_purchase_request_line_make_purchase_order
 msgid "Purchase Request Line Make Purchase Order"
-msgstr "Inköpsförfrågningsrad gör inköpsorder"
+msgstr "Inköpsförfrågningsrad skapa inköpsorder"
 
 #. module: purchase_request
 #: model:ir.model,name:purchase_request.model_purchase_request_line_make_purchase_order_item
 msgid "Purchase Request Line Make Purchase Order Item"
-msgstr "Inköpsförfrågningsrad gör inköpsorder Artikel"
+msgstr "Inköpsförfrågningsrad skapa inköpsorder artikel"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__line_count
 msgid "Purchase Request Line count"
-msgstr "Antal inköpsorderrader"
+msgstr "Inköpsorder Antal rader"
 
 #. module: purchase_request
 #. odoo-python
@@ -1000,7 +968,7 @@ msgstr "Antal avbokat"
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__qty_done
 msgid "Qty Done"
-msgstr "Antal Klar"
+msgstr "Qty Klar"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__qty_in_progress
@@ -1015,7 +983,7 @@ msgstr "Kvantitet"
 #. module: purchase_request
 #: model:ir.model.fields,help:purchase_request.field_purchase_request_line__qty_cancelled
 msgid "Quantity cancelled"
-msgstr "Kvantitet annullerad"
+msgstr "Kvantitet avbruten"
 
 #. module: purchase_request
 #: model:ir.model.fields,help:purchase_request.field_purchase_request_line__qty_done
@@ -1042,8 +1010,8 @@ msgid ""
 "Quantity of the purchase request line allocated to thestock move, in the UoM "
 "of the Purchase Request Line"
 msgstr ""
-"Kvantitet av inköpsorderraden som tilldelats lagerflytten, i måttenheten av "
-"inköpsorderraden"
+"Kvantitet av inköpsorderposten som tilldelats lagerflytten, i "
+"inköpsorderpostens UoM"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order_item__product_qty
@@ -1055,12 +1023,12 @@ msgstr "Antal att köpa"
 #: code:addons/purchase_request/wizard/purchase_request_line_make_purchase_order.py:0
 #, python-format
 msgid "RFQ"
-msgstr "Offertförfrågan"
+msgstr "RFQ"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__purchased_qty
 msgid "RFQ/PO Qty"
-msgstr "Offertförfrågan/antal inköpsorder"
+msgstr "RFQ/PO Antal"
 
 #. module: purchase_request
 #. odoo-python
@@ -1103,7 +1071,7 @@ msgstr "Datum för begäran"
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_order_form
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_order_line_tree
 msgid "Request Lines"
-msgstr "Begär rader"
+msgstr "Begär linjer"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__name
@@ -1129,12 +1097,6 @@ msgstr "Begäran är gjord"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_search
-msgid "Request is in progress"
-msgstr ""
-
-#. module: purchase_request
-#: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
-#: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_search
 msgid "Request is rejected"
 msgstr "Begäran avvisas"
 
@@ -1152,7 +1114,7 @@ msgstr "Begär tillstånd"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 msgid "Request status"
-msgstr "Status för begäran"
+msgstr "Begär status"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__requested_by
@@ -1174,7 +1136,7 @@ msgstr "Begärd av"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
 msgid "Requested for Quotation"
-msgstr "Offertförfrågan"
+msgstr "Förfrågad om offert"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_form
@@ -1201,7 +1163,7 @@ msgstr "Sök inköpsförfrågan"
 #. module: purchase_request
 #: model:ir.model.fields,help:purchase_request.field_purchase_request_allocation__purchase_line_id
 msgid "Service Purchase Order Line"
-msgstr "Inköpsorderrad service"
+msgstr "Beställningsorder för service Line"
 
 #. module: purchase_request
 #. odoo-python
@@ -1216,7 +1178,7 @@ msgid ""
 "Set true if you want to keep the descriptions provided in the wizard in the "
 "new PO."
 msgstr ""
-"Ange Sant om du vill behålla de beskrivningar som anges i guiden i den nya "
+"Ange true om du vill behålla de beskrivningar som anges i guiden i den nya "
 "beställningen."
 
 #. module: purchase_request
@@ -1271,7 +1233,7 @@ msgstr ""
 #: model:ir.model,name:purchase_request.model_stock_move
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_allocation__stock_move_id
 msgid "Stock Move"
-msgstr "Lagerflytt"
+msgstr "Stock Move"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request__move_count
@@ -1281,12 +1243,12 @@ msgstr "Antal lagerflyttar"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_order_line_form2_sub
 msgid "Stock Moves"
-msgstr "Lagerflyttar"
+msgstr "Aktierörelser"
 
 #. module: purchase_request
 #: model:ir.model,name:purchase_request.model_stock_rule
 msgid "Stock Rule"
-msgstr "Lagerhantering"
+msgstr "Aktie Regel"
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order__supplier_id
@@ -1399,7 +1361,7 @@ msgstr "Ej tilldelad"
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.view_purchase_request_search
 msgid "Unassigned Request"
-msgstr "Ej tilldelad begäran"
+msgstr "Otilldelad begäran"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_request_line_search
@@ -1416,7 +1378,7 @@ msgstr "Olästa meddelanden"
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line__product_uom_id
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order_item__product_uom_id
 msgid "UoM"
-msgstr "Måttenhet"
+msgstr "UoM"
 
 #. module: purchase_request
 #: model_terms:ir.ui.view,arch_db:purchase_request.purchase_order_line_search_sub
@@ -1442,13 +1404,13 @@ msgid ""
 "When checked, PO lines on the selected purchase order are only reused if the "
 "scheduled date matches as well."
 msgstr ""
-"När detta är markerat återanvänds inköpsorderrader på den valda inköpsordern "
-"endast om det schemalagda datumet också stämmer."
+"När detta är markerat återanvänds PO-rader på den valda inköpsordern endast "
+"om det schemalagda datumet också stämmer."
 
 #. module: purchase_request
 #: model:ir.model.fields,field_description:purchase_request.field_purchase_request_line_make_purchase_order_item__wiz_id
 msgid "Wizard"
-msgstr "Trollkarl"
+msgstr "Guide"
 
 #. module: purchase_request
 #. odoo-python
@@ -1512,8 +1474,7 @@ msgstr "Du måste välja rader från samma Plocktyp."
 #: code:addons/purchase_request/wizard/purchase_request_line_make_purchase_order.py:0
 #, python-format
 msgid "You have to select lines from the same company."
-msgstr "Du måste välja rader från samma bolag."
+msgstr "Du måste välja linjer från samma bolag."
 
-#, python-format
-#~ msgid "Purchase Request %s is not approved"
-#~ msgstr "Inköpsbegäran %s är inte godkänd"
+#~ msgid "SMS Delivery error"
+#~ msgstr "Fel vid leverans av SMS"

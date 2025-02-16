@@ -8,14 +8,12 @@ _STATES = [
     ("draft", "Draft"),
     ("to_approve", "To be approved"),
     ("approved", "Approved"),
-    ("in_progress", "In progress"),
-    ("done", "Done"),
     ("rejected", "Rejected"),
+    ("done", "Done"),
 ]
 
 
 class PurchaseRequest(models.Model):
-
     _name = "purchase.request"
     _description = "Purchase Request"
     _inherit = ["mail.thread", "mail.activity.mixin"]
@@ -49,13 +47,7 @@ class PurchaseRequest(models.Model):
     @api.depends("state")
     def _compute_is_editable(self):
         for rec in self:
-            if rec.state in (
-                "to_approve",
-                "approved",
-                "rejected",
-                "in_progress",
-                "done",
-            ):
+            if rec.state in ("to_approve", "approved", "rejected", "done"):
                 rec.is_editable = False
             else:
                 rec.is_editable = True
@@ -108,10 +100,9 @@ class PurchaseRequest(models.Model):
         comodel_name="purchase.request.line",
         inverse_name="request_id",
         string="Products to Purchase",
-        readonly=True,
+        readonly=False,
         copy=True,
         tracking=True,
-        states={"draft": [("readonly", False)]},
     )
     product_id = fields.Many2one(
         comodel_name="product.product",
@@ -237,7 +228,7 @@ class PurchaseRequest(models.Model):
         default = dict(default or {})
         self.ensure_one()
         default.update({"state": "draft", "name": self._get_default_name()})
-        return super(PurchaseRequest, self).copy(default)
+        return super().copy(default)
 
     @api.model
     def _get_partner_id(self, request):
@@ -249,15 +240,15 @@ class PurchaseRequest(models.Model):
         for vals in vals_list:
             if vals.get("name", _("New")) == _("New"):
                 vals["name"] = self._get_default_name()
-        requests = super(PurchaseRequest, self).create(vals_list)
-        for vals, request in zip(vals_list, requests):
+        requests = super().create(vals_list)
+        for vals, request in zip(vals_list, requests, strict=True):
             if vals.get("assigned_to"):
                 partner_id = self._get_partner_id(request)
                 request.message_subscribe(partner_ids=[partner_id])
         return requests
 
     def write(self, vals):
-        res = super(PurchaseRequest, self).write(vals)
+        res = super().write(vals)
         for request in self:
             if vals.get("assigned_to"):
                 partner_id = self._get_partner_id(request)
@@ -274,7 +265,7 @@ class PurchaseRequest(models.Model):
                 raise UserError(
                     _("You cannot delete a purchase request which is not draft.")
                 )
-        return super(PurchaseRequest, self).unlink()
+        return super().unlink()
 
     def button_draft(self):
         self.mapped("line_ids").do_uncancel()
@@ -291,9 +282,6 @@ class PurchaseRequest(models.Model):
         self.mapped("line_ids").do_cancel()
         return self.write({"state": "rejected"})
 
-    def button_in_progress(self):
-        return self.write({"state": "in_progress"})
-
     def button_done(self):
         return self.write({"state": "done"})
 
@@ -301,7 +289,7 @@ class PurchaseRequest(models.Model):
         """When all lines are cancelled the purchase request should be
         auto-rejected."""
         for pr in self:
-            if not pr.line_ids.filtered(lambda l: l.cancelled is False):
+            if not pr.line_ids.filtered(lambda line: line.cancelled is False):
                 pr.write({"state": "rejected"})
 
     def to_approve_allowed_check(self):

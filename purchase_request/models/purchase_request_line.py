@@ -8,14 +8,12 @@ _STATES = [
     ("draft", "Draft"),
     ("to_approve", "To be approved"),
     ("approved", "Approved"),
-    ("in_progress", "In progress"),
-    ("done", "Done"),
     ("rejected", "Rejected"),
+    ("done", "Done"),
 ]
 
 
 class PurchaseRequestLine(models.Model):
-
     _name = "purchase.request.line"
     _description = "Purchase Request Line"
     _inherit = ["mail.thread", "mail.activity.mixin", "analytic.mixin"]
@@ -248,13 +246,7 @@ class PurchaseRequestLine(models.Model):
     )
     def _compute_is_editable(self):
         for rec in self:
-            if rec.request_id.state in (
-                "to_approve",
-                "approved",
-                "rejected",
-                "in_progress",
-                "done",
-            ):
+            if rec.request_id.state in ("to_approve", "approved", "rejected", "done"):
                 rec.is_editable = False
             else:
                 rec.is_editable = True
@@ -274,7 +266,7 @@ class PurchaseRequestLine(models.Model):
         if self.product_id:
             name = self.product_id.name
             if self.product_id.code:
-                name = "[{}] {}".format(self.product_id.code, name)
+                name = f"[{self.product_id.code}] {name}"
             if self.product_id.description_purchase:
                 name += "\n" + self.product_id.description_purchase
             self.product_uom_id = self.product_id.uom_id.id
@@ -290,7 +282,7 @@ class PurchaseRequestLine(models.Model):
         self.write({"cancelled": False})
 
     def write(self, vals):
-        res = super(PurchaseRequestLine, self).write(vals)
+        res = super().write(vals)
         if vals.get("cancelled"):
             requests = self.mapped("request_id")
             requests.check_auto_reject()
@@ -386,7 +378,7 @@ class PurchaseRequestLine(models.Model):
                         "if the purchase request is in draft state."
                     )
                 )
-        return super(PurchaseRequestLine, self).unlink()
+        return super().unlink()
 
     def action_show_details(self):
         self.ensure_one()

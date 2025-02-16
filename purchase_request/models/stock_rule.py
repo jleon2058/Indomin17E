@@ -41,6 +41,8 @@ class StockRule(models.Model):
             "company_id": values["company_id"].id,
             "picking_type_id": self.picking_type_id.id,
             "group_id": group_id or False,
+            "requested_by": self.env.context.get("uid", self.env.uid),
+            "assigned_to": False,
         }
 
     @api.model
@@ -89,7 +91,7 @@ class StockRule(models.Model):
                 procurements.pop(index)
         if not procurements:
             return
-        return super(StockRule, self)._run_buy(procurements)
+        return super()._run_buy(procurements)
 
     def create_purchase_request(self, procurement_group):
         """

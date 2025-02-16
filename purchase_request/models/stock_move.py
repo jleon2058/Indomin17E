@@ -33,11 +33,11 @@ class StockMove(models.Model):
 
     @api.model
     def _prepare_merge_moves_distinct_fields(self):
-        distinct_fields = super(StockMove, self)._prepare_merge_moves_distinct_fields()
+        distinct_fields = super()._prepare_merge_moves_distinct_fields()
         distinct_fields += ["created_purchase_request_line_id"]
         return distinct_fields
 
-    def _action_cancel_create_mail_activity(self):
+    def _action_cancel(self):
         """Create an activity on the request for the cancelled procurement move"""
         for move in self:
             if move.created_purchase_request_line_id:
@@ -46,14 +46,6 @@ class StockMove(models.Model):
                 except ValueError:
                     activity_type_id = False
                 pr_line = move.created_purchase_request_line_id
-                if pr_line.product_id.responsible_id:
-                    activity_user = pr_line.product_id.responsible_id
-                elif pr_line.request_id.assigned_to:
-                    activity_user = pr_line.request_id.assigned_to
-                elif move.picking_id.user_id:
-                    activity_user = move.picking_id.user_id
-                else:
-                    activity_user = self.env.user
                 self.env["mail.activity"].sudo().create(
                     {
                         "activity_type_id": activity_type_id,
@@ -62,17 +54,16 @@ class StockMove(models.Model):
                             "purchase request has been cancelled/deleted. "
                             "Check if an action is needed."
                         ),
-                        "user_id": activity_user.id,
+                        "user_id": (
+                            pr_line.product_id.responsible_id.id or self.env.user.id
+                        ),
                         "res_id": pr_line.request_id.id,
                         "res_model_id": self.env.ref(
                             "purchase_request.model_purchase_request"
                         ).id,
                     }
                 )
-
-    def _action_cancel(self):
-        self._action_cancel_create_mail_activity()
-        return super(StockMove, self)._action_cancel()
+        return super()._action_cancel()
 
     @api.depends("purchase_request_allocation_ids")
     def _compute_purchase_request_ids(self):
@@ -82,7 +73,7 @@ class StockMove(models.Model):
             )
 
     def _merge_moves_fields(self):
-        res = super(StockMove, self)._merge_moves_fields()
+        res = super()._merge_moves_fields()
         res["purchase_request_allocation_ids"] = [
             (4, m.id) for m in self.mapped("purchase_request_allocation_ids")
         ]
@@ -149,10 +140,12 @@ class StockMove(models.Model):
                         0,
                         0,
                         {
-                            "purchase_request_line_id": alloc.purchase_request_line_id.id,
+                            "purchase_request_line_id": (
+                                alloc.purchase_request_line_id.id
+                            ),
                             "requested_product_uom_qty": open_qty,
                         },
                     )
                 )
                 alloc.requested_product_uom_qty -= open_qty
-        return super(StockMove, self).copy_data(default)
+        return super().copy_data(default)

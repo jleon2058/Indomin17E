@@ -8,7 +8,7 @@ from odoo.tests.common import Form, TransactionCase
 
 class TestPurchaseRequest(TransactionCase):
     def setUp(self):
-        super(TestPurchaseRequest, self).setUp()
+        super().setUp()
         self.purchase_request_obj = self.env["purchase.request"]
         self.purchase_request_line_obj = self.env["purchase.request.line"]
         self.purchase_order = self.env["purchase.order"]
@@ -21,6 +21,7 @@ class TestPurchaseRequest(TransactionCase):
         }
         self.purchase_request = self.purchase_request_obj.create(vals)
         vals = {
+            "name": "Test line",
             "request_id": self.purchase_request.id,
             "product_id": self.env.ref("product.product_product_13").id,
             "product_uom_id": self.env.ref("uom.product_uom_unit").id,
@@ -51,19 +52,6 @@ class TestPurchaseRequest(TransactionCase):
         self.assertEqual(purchase_request.is_editable, True, "Should be editable")
         self.assertEqual(purchase_request.state, "draft", "Should be in state draft")
         purchase_request.button_to_approve()
-        purchase_request.button_in_progress()
-        self.assertEqual(
-            purchase_request.state, "in_progress", "Should be in state in_progress"
-        )
-        self.assertEqual(purchase_request.is_editable, False, "Should not be editable")
-        with self.assertRaises(exceptions.UserError) as e:
-            purchase_request.unlink()
-        msg = "You cannot delete a purchase request which is not draft."
-        self.assertIn(msg, e.exception.args[0])
-        purchase_request.button_draft()
-        self.assertEqual(purchase_request.is_editable, True, "Should be editable")
-        self.assertEqual(purchase_request.state, "draft", "Should be in state draft")
-        purchase_request.button_to_approve()
         purchase_request.button_done()
         self.assertEqual(purchase_request.is_editable, False, "Should not be editable")
         with self.assertRaises(exceptions.UserError) as e:
@@ -73,6 +61,7 @@ class TestPurchaseRequest(TransactionCase):
         purchase_request.button_rejected()
         self.assertEqual(purchase_request.is_editable, False, "Should not be editable")
         vals = {
+            "name": "Test line 1",
             "request_id": purchase_request.id,
             "product_id": self.env.ref("product.product_product_6").id,
             "product_uom_id": self.env.ref("uom.product_uom_unit").id,
@@ -115,7 +104,7 @@ class TestPurchaseRequest(TransactionCase):
         ).create(vals)
         wiz_id.make_purchase_order()
         # Unlink purchase_lines from state approved
-        with self.assertRaises(UserError):
+        with self.assertRaises(exceptions.UserError):
             purchase_request_line.unlink()
         purchase = purchase_request_line.purchase_lines.order_id
         purchase.button_done()
@@ -281,15 +270,6 @@ class TestPurchaseRequest(TransactionCase):
 
         pr.button_to_approve()
         self.assertEqual(pr.state, "to_approve", "Should be in state to_approve")
-        with self.assertRaises(exceptions.UserError) as e:
-            pr_lines.unlink()
-        msg = (
-            "You can only delete a purchase request line "
-            "if the purchase request is in draft state."
-        )
-        self.assertIn(msg, e.exception.args[0])
-        pr.button_in_progress()
-        self.assertEqual(pr.state, "in_progress", "Should be in state in_progress")
         with self.assertRaises(exceptions.UserError) as e:
             pr_lines.unlink()
         msg = (
