@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="access_purchase_request_manager_personal" model="ir.model.access">
+            <field name="name">access.purchase.request.manager.personal</field>
+            <field name="model_id" ref="model_purchase_request"/>
+            <field name="group_id" ref="ind_purchase_request.group_purchase_request_manager_personal"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="access_purchase_request_line_manager_personal" model="ir.model.access">
+            <field name="name">access.purchase.request.line.manager.personal</field>
+            <field name="model_id" ref="model_purchase_request_line"/>
+            <field name="group_id" ref="ind_purchase_request.group_purchase_request_manager_personal"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="access_purchase_request_manager_department" model="ir.model.access">
+            <field name="name">access.purchase.request.manager.department</field>
+            <field name="model_id" ref="model_purchase_request"/>
+            <field name="group_id" ref="group_purchase_request_manager_department"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="access_purchase_request_line_manager_department" model="ir.model.access">
+            <field name="name">access.purchase.request.line.manager.department</field>
+            <field name="model_id" ref="model_purchase_request_line"/>
+            <field name="group_id" ref="group_purchase_request_manager_department"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="access_purchase_request_manager_costo_estimado" model="ir.model.access">
+            <field name="name">access.purchase.request.manager.costo.estimado</field>
+            <field name="model_id" ref="model_purchase_request_line"/>
+            <field name="group_id" ref="group_purchase_request_manager_costo_promedio"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+        
+        <!-- <record id="access_purchase_cost_provider" model="ir.model.access">
+            <field name="name">access.purchase.cost.provider</field>
+            <field name="model_id" ref="model_purchase_order"/>
+            <field name="group_id" ref="group_purchase_order_supplier"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record> -->
+
+        <!-- <record id="access_purchase_line_cost_provider" model="ir.model.access">
+            <field name="name">access.purchase.line.cost.provider</field>
+            <field name="model_id" ref="model_purchase_order_line"/>
+            <field name="group_id" ref="group_purchase_price_supplier"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record> -->
+
+    </data>
+</odoo>

@@ -1,0 +1,10 @@
+<odoo>
+    <record id="module_ind_purchase_request" model="ir.module.category">
+        <field name="name">ind_purchase request</field>
+    </record>
+
+    <record id="res_group_usuario_RFQ" model="res.groups">
+        <field name="name">Usuario Campo Tipo RFQ Obligatorio [C]</field>
+        <field name="category_id" ref="ind_purchase_request.module_ind_purchase_request"/>
+    </record>
+</odoo>

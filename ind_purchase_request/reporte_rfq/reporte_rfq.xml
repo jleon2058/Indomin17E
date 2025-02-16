@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+        id="report_rfq_xlsx"
+        model="purchase.request.line"
+        string="Reporte RFQ"
+        report_type="xlsx"
+        name="ind_purchase_request.reporte_rfq"
+        file="reporte_rfq"
+        attachment_use="False"
+    />
+</odoo>

@@ -1,0 +1,165 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="ind_view_purchase_request_form" model="ir.ui.view">
+        <field name="name">ind.purchase.request.form</field>
+        <field name="model">purchase.request</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_rejected']" position="after">
+                <button
+                    name = "print_report_purchase_request"
+                    string = "Imprimir RFQ"
+                    type = "object"
+                    attrs="{'invisible':[('state', 'not in', ('to_approve', 'approved', 'rejected', 'done'))]}"
+                />
+            </xpath>
+            <xpath expr="//field[@name='line_ids']" position="attributes">
+                <attribute name="attrs">{'readonly': [('state','not in', ('draft','to_approve'))]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//notebook/page/field/tree/field[2]" position="replace">
+                <field name="name" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group[3]" position="after">
+                <group>
+                    <field 
+                        name="planning"
+                        invisible="1"
+                    />
+                    <field
+                        name="request_type"
+                        attrs="{'readonly': [('is_editable','=', False)]}"
+                    />
+                    <field
+                        name="approved_by"
+                    />
+                    <field
+                        name="date_approved"
+                    />
+                </group>
+            </xpath>
+            <xpath expr="//button[@name='button_approved']" position="attributes">
+                <attribute name="groups">
+                    purchase_request.group_purchase_request_manager,
+                    ind_purchase_request.group_purchase_request_manager_personal,
+                    ind_purchase_request.group_purchase_request_manager_department
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_done']" position="attributes">
+                <attribute name="groups">
+                    purchase_request.group_purchase_request_manager,
+                    ind_purchase_request.group_purchase_request_manager_personal,
+                    ind_purchase_request.group_purchase_request_manager_department
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_rejected']" position="attributes">
+                <attribute name="groups">
+                    purchase_request.group_purchase_request_manager,
+                    ind_purchase_request.group_purchase_request_manager_personal,
+                    ind_purchase_request.group_purchase_request_manager_department
+                </attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook" position="inside">
+                <page string="Observaciones">
+                    <group>
+                        <field name="observations" widget="text"/>
+                        <field name='document_file' string="Documento" widget="binary"  filename="document_file_name"/>
+                        <field name='document_file_name' string="Documento" invisible="1"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='estimated_cost']" position="after">
+                <field name ="costo_promedio" groups="ind_purchase_request.group_purchase_request_manager_costo_promedio"/>
+            </xpath>
+            <xpath expr="//group[@class='oe_subtotal_footer oe_right']" position="inside">
+                <div class="oe_subtotal_footer_separator oe_inline">
+                    <label for="costo_promedio_total" groups="ind_purchase_request.group_purchase_request_manager_costo_promedio"/>
+                </div>
+                <field
+                    name="costo_promedio_total"
+                    nolabel="1"
+                    class="oe_subtotal_footer_separator"
+                    widget="monetary"
+                    options="{'currency_field': 'currency_id'}"
+                    groups="ind_purchase_request.group_purchase_request_manager_costo_promedio"
+                />
+            </xpath>
+            <xpath expr="//notebook/page/field[@name='line_ids']/tree/field[@name='purchased_qty']" position="after">
+                <field name="request_state"/>
+            </xpath>
+            <xpath expr="//button[@name='button_rejected']" position="attributes">
+                <attribute name="string">Anular</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_start']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="ind_view_purchase_request_tree" model="ir.ui.view">
+        <field name="name">ind.view.purchase.request.tree</field>
+        <field name="model">purchase.request</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_ids']" position="replace">
+                <field name="description" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='requested_by']" position="after">
+                <field 
+                    name = "request_type"
+                    optional="show"
+                    widget = "badge"
+                    decoration-success="request_type == 'programado'"
+                    decoration-warning="request_type == 'no_programado'"
+                    decoration-danger="request_type == 'consumible'"
+                />
+            </xpath>
+        </field>
+    </record>
+    <record id="ind_view_purchase_request_search" model="ir.ui.view">
+        <field name="name">ind.purchase.request.list.select</field>
+        <field name="model">purchase.request</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_requests']" position="after">
+                <filter 
+                    name="approved_by_me"
+                    domain="[('approved_by','=', uid)]"
+                    help="Mis RFQs Aprobadas"
+                />
+            </xpath>
+            <xpath expr="//filter[@name='assigned_to']" position="after">
+                <filter
+                    name="approved_by"
+                    string="Aprobado por"
+                    icon="fa-user"
+                    domain="[]"
+                    context="{'group_by':'approved_by'}"
+                />
+                <filter
+                    name="rfq_type"
+                    string="Tipo de RFQ"
+                    icon="fa-user"
+                    domain="[]"
+                    context="{'group_by':'request_type'}"
+                />
+            </xpath>
+            <xpath expr="//filter[@name='start_date']" position="after">
+                <filter
+                    name="date_approved"
+                    string="Fecha de Aprobación"
+                    icon="fa-calendar"
+                    domain="[]"
+                    context="{'group_by':'date_approved'}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

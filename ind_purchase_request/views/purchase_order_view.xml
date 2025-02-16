@@ -1,0 +1,174 @@
+<?xml version="1.0" ?>
+<odoo>
+    <!-- Herencia de Vista Formulario de Orden de Compras -->
+    <record id="ind_purchase_order_form" model="ir.ui.view">
+        <field name="name">ind.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button type="object"
+                    name="action_view_rfq"
+                    class="oe_stat_button"
+                    icon="fa-th-list" attrs="{'invisible':[('rfq_related_count','=', 0)]}">
+                    <field name="rfq_related_count" widget="statinfo" help="RFQs Asociadas"/>
+                </button>
+                <!-- <button type="object"
+                    name="action_view_invoice"
+                    class="oe_stat_button"
+                    icon="fa-file-text" attrs="{'invisible':[('invoices_related_count','=', 0)]}">
+                    <field name="invoices_related_count" widget="statinfo" help="Facturas Asociadas"/>
+                </button> -->
+            </xpath>
+            <xpath expr="//div[@name='reminder']" position="after">
+                <field name="date_picking"/>
+                <field name="order_status"/>
+            </xpath>
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="view_notes"/>
+                <field name="inverse_rate" attrs="{'readonly': [('state', 'not in', ('draft', 'sent', 'to approve'))]}"/>
+                <field name="fake_inverse_rate" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='price_unit']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='discount']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='taxes_id']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='price_subtotal']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Herencia de Vista Árbol de Orden de Compras -->
+    <record id="ind_purchase_order_tree" model="ir.ui.view">
+        <field name="name">ind.purchase.order.view.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_ids']" position="replace">
+                <field name="purchase_request_related" widget="many2many_tags" optional="show" readonly='1'/>
+            </xpath>
+            <xpath expr="//field[@name='purchase_request_related']" position="after">
+                <field name="order_status"
+                    widget = "badge"
+                    decoration-success="order_status == 'almacen'"
+                    decoration-warning="order_status == 'pago'"
+                    decoration-info="order_status == 'transporte'"
+                    decoration-muted="order_status == 'proveedor'"
+                    optional="show"
+                />
+                <field name="invoice_ids" widget="many2many_tags" optional="show" readonly="1" domain="[('state','=','posted')]"/>
+                <!-- <field name="invoices_related" widget="many2many_tags" optional="show" readonly='1'/> -->
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_supplier
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_total']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Herencia de Vista Árbol para Solicitud de Presupuesto en OC -->
+    <record id="ind_purchase_order_kpis_tree" model="ir.ui.view">
+        <field name="name">ind.purchase.order.inherit.purchase.order.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_ids']" position="replace">
+                <field name="purchase_request_related" widget="many2many_tags" optional="show" readonly='1'/>
+            </xpath>
+            <xpath expr="//field[@name='purchase_request_related']" position="after">
+                <field name="order_status"
+                    widget = "badge"
+                    decoration-success="order_status == 'almacen'"
+                    decoration-warning="order_status == 'pago'"
+                    decoration-info="order_status == 'transporte'"
+                    decoration-muted="order_status == 'proveedor'"
+                    optional="show"
+                />
+                <!-- <field name="invoices_related" widget="many2many_tags" optional="show" readonly='1'/> -->
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_supplier
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_total']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Herencia de Vista de Búsqueda en Orden de Compras  -->
+    <record id="ind_purchase_order_view_search" model="ir.ui.view">
+        <field name="name">ind.purchase.order.select</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_search" />
+        <field name="arch" type="xml">
+            <!-- <xpath expr="//filter[@name='order_date']" position="after">
+                <filter 
+                    name="order_status"
+                    domain="[('order_','=', uid)]"
+                    help="Mis RFQs Aprobadas"
+                />
+            </xpath> -->
+            <xpath expr="//filter[@name='order_date']" position="after">
+                <filter
+                    name="order_status"
+                    string="Estado de Pedido"
+                    icon="fa-user"
+                    domain="[]"
+                    context="{'group_by':'order_status'}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Herencia de Vista de Búsqueda para Solicitud de Presupuesto en OC -->
+    <record id="ind_view_purchase_order_filter" model="ir.ui.view">
+        <field name="name">ind.request.quotation.select</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='order_date']" position="after">
+                <filter
+                    name="order_status"
+                    string="Estado de Pedido"
+                    icon="fa-user"
+                    domain="[]"
+                    context="{'group_by':'order_status'}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
