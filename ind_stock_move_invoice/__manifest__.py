@@ -1,5 +1,7 @@
 {
     'name': "Indomin Invoice From Stock Picking",
+    'author': "Juan Leon",
+    'version': "17.0.1.1.0",
     'summary': """In this module creating customer invoice,vendor bill, customer
     credit note and refund from stock picking""",
     'description': """In this module creating customer invoice,vendor bill, customer
