@@ -11,7 +11,7 @@ class AccountMoveLine(models.Model):
 
     def validate_analytic_account(self):
         for line in self:    
-            if line.is_analytic_account_required and not line.analytic_account_id:
+            if line.is_analytic_account_required and not line.analytic_distribution:
                 raise UserError(f'La cuenta contable {line.account_id.name} requiere un centro de costo.')
     def create(self, vals):
         res = super(AccountMoveLine, self).create(vals)

@@ -1,7 +1,6 @@
 from odoo.exceptions import UserError
 from odoo import api, fields, models, _
 
-
 class AccountMove(models.Model):
     _inherit = "account.move"
 
@@ -17,12 +16,14 @@ class AccountMove(models.Model):
                             _('Target accounts not found for: %s') % line.account_id.name)
                     line._create_target_move_lines(
                         debit_target_account_id, credit_target_account_id)
-                elif line.account_target_move_type == 'analytic' and line.analytic_account_id and (line.debit + line.credit) != 0:
-                    debit_target_account_id = line.analytic_account_id.debit_target_account_id
-                    credit_target_account_id = line.analytic_account_id.credit_target_account_id
-                    if debit_target_account_id and credit_target_account_id:
-                        line._create_target_move_lines(
-                        debit_target_account_id, credit_target_account_id)
+                elif line.account_target_move_type == 'analytic' and line.analytic_distribution and (line.debit + line.credit) != 0:
+                    # -----------MODIFICACION DE INDOMIN----------
+                    for account_id, proportion in line.analytic_distribution.items():
+                        debit_target_account_id = self.env['account.analytic.account'].browse(int(account_id)).debit_target_account_id
+                        credit_target_account_id = self.env['account.analytic.account'].browse(int(account_id)).credit_target_account_id
+                        if debit_target_account_id and credit_target_account_id:
+                            line._create_target_move_lines(
+                                debit_target_account_id, credit_target_account_id)
         res = super(AccountMove, self)._post(soft=soft)
         return res
 

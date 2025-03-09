@@ -8,8 +8,8 @@
             <field name="deprecated" position="after">
                 <field name="is_analytic_account_required"/>
                 <field name="account_target_move_type"/>
-                <field name="debit_target_account_id" attrs="{'invisible':[('account_target_move_type','!=','entry')],'required':[('account_target_move_type','=','entry')]}" domain="[('company_id','=',company_id)]"/>
-                <field name="credit_target_account_id" attrs="{'invisible':[('account_target_move_type','!=','entry')],'required':[('account_target_move_type','=','entry')]}" domain="[('company_id','=',company_id)]"/>
+                <field name="debit_target_account_id"/>
+                <field name="credit_target_account_id"/>
             </field>
         </field>
     </record>
