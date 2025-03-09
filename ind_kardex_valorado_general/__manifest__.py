@@ -4,7 +4,7 @@
     'author':'Juan Carlos',
     'version': '17.0.0.1.0',
     'depends':[
-        "base","stock","purchase_request","ind_unidadmedida","account","product"
+        "base","stock","purchase_request","account","product"
     ],
     'data':[
         "security/res_group.xml",
