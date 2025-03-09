@@ -21,13 +21,13 @@
     'license': 'LGPL-3',
 
     'category': 'Localization',
-    'version': '15.0',
+    'version': '17.0',
     
     'price': 39.99,
     'currency': 'EUR',
 
     'depends': [
-        'account',
+        'account'
     ],
 
     'data': [
