@@ -31,19 +31,10 @@
                             <group>
                                 <group string="Sequence">
                                     <field name="sequence_number_next"/>
-                                    <field name="sequence_id" required="0" attrs="{'readonly': 1}"/>
-                                    <button name="create_journal_sequence" string="Create sequence" type="object" class="oe_highlight"
-                                            attrs="{'invisible': [('sequence_id','!=',False)]}"/>
+                                    <field name="sequence_id" required="0"/>
+                                    <button name="create_journal_sequence" string="Create sequence" type="object" class="oe_highlight"/>
                                 </group>
                             </group>
-                            <!--<group>
-                                
-                                <group string="Configuración">
-                                    <button name="restart_seat_numbers" string="Reiniciar correlativos" type="object"
-                                            attrs="{'invisible': [('sequence_id','!=',False)]}"/>
-                                </group>
-                                
-                            </group>-->
                         </page>
                     </notebook>
                 </sheet>

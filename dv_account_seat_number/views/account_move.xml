@@ -5,7 +5,7 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
             <xpath expr="//group[@id='header_right_group']" position="inside">
-                <field name="seat_number" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="seat_number"/>
             </xpath>
         </field>
     </record>
