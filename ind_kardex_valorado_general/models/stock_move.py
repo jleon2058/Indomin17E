@@ -19,59 +19,54 @@ class StockMove(models.Model):
                 primer_account_move=record.account_move_ids[0]
                 record.asiento_id=primer_account_move.id
 
-    # @api.depends('account_move_ids',)
-    # def calcular_monto_asigned(self):
-    #     for record in self:
-    #         if record.account_move_ids:
-    #             primer_account_move=record.account_move_ids[0]
-    #             record.monto_asiento=primer_account_move.amount_total_signed
-
-    # @api.depends('account_move_ids',)
-    # def calcular_monto_asigned(self):
-    #     for record in self:
-    #         if record.account_move_ids:
-    #             primer_account_move=record.account_move_ids[0]
-
-    #             monto_debit=0
-    #             monto_credit=0
-
-    #             for line in primer_account_move.line_ids:
-    #                 if line.account_id.is_inventory_account:
-    #                     if line.debit:
-    #                         monto_debit+=line.debit
-    #                     if line.credit:
-    #                         monto_credit+=line.credit
-
-    #             record.monto_credit=monto_credit
-    #             record.monto_debit=monto_debit
-
-    
-    @api.depends('account_move_ids',)
+    @api.depends('account_move_ids')
     def calcular_monto_asigned(self):
         for record in self:
-            
-            if record.location_dest_id.usage=='internal':
+            asiento_monto = 0
+            logger.warning("-----movimiento------")
+            logger.warning(record)
+            if record.location_dest_id.usage == 'internal':
+                # Iteramos sobre todos los asientos vinculados al stock_move
                 if record.account_move_ids:
-                    primer_account_move=record.account_move_ids[0]
+                    logger.warning("------record----------")
+                    for move in record.account_move_ids:
+                        logger.warning("------move in rec-------")
+                        logger.warning(move)
+                        # Para cada asiento, revisamos sus líneas
+                        if move.state=='posted':
+                            for line in move.line_ids:
+                                # Si la cuenta de la línea es una cuenta de inventario, sumamos el débito
+                                if line.account_id.is_inventory_account:
+                                    logger.warning("------move in rec-account------")
+                                    logger.warning(line.debit)
+                                    asiento_monto += line.debit
 
-                    asiento_monto=0
+                            logger.warning("------end for------")
+                            logger.warning(asiento_monto)
+                record.monto_asiento = asiento_monto
+                logger.warning("----if final-----")
+                logger.warning(record.monto_asiento)
 
-                    for line in primer_account_move.line_ids:
-                        if line.account_id.is_inventory_account:
-                            asiento_monto=asiento_monto+line.debit
-
-                    record.monto_asiento=asiento_monto
             else:
+                logger.warning("-----else record--------")
                 if record.account_move_ids:
-                    primer_account_move=record.account_move_ids[0]
+                    logger.warning("-----else record-2-------")
+                    for move in record.account_move_ids:
+                        # Para cada asiento, revisamos sus líneas
+                        if move.state=='posted':
+                            for line in move.line_ids:
+                                logger.warning("-----else line-----")
+                                # Si la cuenta de la línea es una cuenta de inventario, sumamos el débito
+                                if line.account_id.is_inventory_account:
+                                    logger.warning("-----if else line-----")
+                                    logger.warning(line.credit)
+                                    asiento_monto += line.credit
 
-                    asiento_monto=0
-
-                    for line in primer_account_move.line_ids:
-                        if line.account_id.is_inventory_account:
-                            asiento_monto=asiento_monto+line.credit
-
-                    record.monto_asiento=asiento_monto
+                            logger.warning("-----else-end for------")
+                            logger.warning(asiento_monto)
+                record.monto_asiento = asiento_monto
+                logger.warning("----else final-----")
+                logger.warning(record.monto_asiento)
 
     @api.depends('monto_asiento', 'product_uom_qty')
     def calcular_precio_unitario(self):
@@ -80,20 +75,3 @@ class StockMove(models.Model):
                 record.precio_unit_asiento=round(record.monto_asiento/record.product_uom_qty,6)
             else:
                 record.precio_unit_asiento = 0
-
-    
-
-
-    # @api.model
-    # def _create_account_move(self,move):
-
-    #     company = move.company_id
-
-    #     self.env['account.move'].create()
-
-    # def _action_done(self):
-
-    #     res = super(StockMove,self)._action_done()
-    #     for move in self:
-    #         self._create_account_move(move)
-    #     return res

@@ -31,35 +31,6 @@
             <field name="context">{'no_create_edit': True}</field>
         </record>
 
-        <record id="view_cencos_form" model="ir.ui.view">
-            <field name="name">view.cencos.form</field>
-            <field name="model">ind.cencos</field>
-            <field name="arch" type="xml">
-                <form>
-                    <group>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
-
-                    </group>
-                    <footer>
-                        <button name="genera_reporte_cencos" string="Generate CENCOS" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-
-        <record id="action_cencos" model="ir.actions.act_window">
-            <field name="name">Reporte de Centro de costo</field>
-            <field name="res_model">ind.cencos</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_cencos_form"/>
-            <field name="target">new</field>
-            <field name="context">{'no_create_edit': True}</field>
-        </record>
-
         <menuitem id="menu_kardexval_general" name="Reporte Kardex General" parent="stock.menu_warehouse_report" action="action_kardexval_general_wizard" sequence="10"/>
-        <menuitem id="consumos_centro_costo" name="Consumo por Centro de costo" parent="stock.menu_warehouse_report" action="action_cencos" sequence="11" groups="base.group_user"/>
     </data>
 </odoo>

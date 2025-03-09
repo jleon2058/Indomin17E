@@ -218,10 +218,6 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
             
 # 4.2. CREACION DE LOS DATOS DE LA CABECERA PRINCIPAL POR CADA HOJA DEL REPORTE
 
-            # locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
-
-            # worksheet.write('E3',f'{date_from}  -  {date_to}')
-                
 # 4.3. OBTENCIÓN DEL SALDO INICIAL
 
 # 4.3.1. Calculo de las Cantidad del Saldo Inicial
@@ -239,8 +235,8 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                     logger.warning(row)
                     logger.warning("-------product-------")
                     logger.warning(producto)  
-                    if producto.uom_id.codigo_sunat not in lista_unidades:
-                        lista_unidades.append(producto.uom_id.codigo_sunat)
+                    if producto.uom_id.l10n_pe_edi_measure_unit_code not in lista_unidades:
+                        lista_unidades.append(producto.uom_id.l10n_pe_edi_measure_unit_code)
 
                     cant_saldo_inicial=0
                     monto_saldo_inicial=0
@@ -320,7 +316,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                         resultado_ajuste_precio=self.env.cr.dictfetchall()
 
                         logger.warning("----resultss-ajuste----")
-                        logger.warning(results) 
+                        logger.warning(resultado_ajuste_precio) 
 
 # 3.5.2. Almacenamiento de datos extraidos a un Diccionario
 
@@ -342,7 +338,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
 
                         lista_clave_ordenada_location_id = ['date','tipo_doc','serie_albaran','numero_albaran','tip_tabla12','location_name','product_uom_qty','precio_unit_asiento','monto_asiento','nombre_cc','id','tipo_cambio']
                         lista_clave_ordenada_location_dest_id = ['date','tipo_doc','serie_albaran','numero_albaran','tip_tabla12','location_dest_name','product_uom_qty','precio_unit_asiento','monto_asiento','nombre_cc','id','tipo_cambio']
-
+                        logger.warning("---1 kardex---")
                         for l in results:
                     # product_nombre=l.get('name')
                     # producto_nombre=product_nombre['es_PE']
@@ -361,11 +357,12 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                     #     partes_factura=["",""]
                     # serie_factura=partes_factura[0]
                     # num_factura='-'.join(partes_factura[1:])
+                            logger.warning("---2 kardex---")
                             productos_sm = self.env['stock.move'].browse(l.get('id')).mapped('product_id').ids
                             pick_id = self.env['stock.move'].browse(l.get('id')).mapped('picking_id').ids
                             factura_sm = self.env['account.move'].search([('invoice_line_ids.product_id','in',productos_sm),('transfer_ids','in',pick_id),('state','=','posted')]).mapped('name')
                             moneda_sm = self.env['account.move'].search([('invoice_line_ids.product_id','in',productos_sm),('transfer_ids','in',pick_id),('state','=','posted')]).mapped('currency_id').id
-
+                            logger.warning("---3 kardex---")
                     # if factura_sm.currency_id==2 and factura_sm:
                             if moneda_sm==2:
                                 # fecha_asiento = factura_sm.invoice_date
@@ -373,9 +370,10 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                                 tipo_cambio = self.env['res.currency.rate'].search([('name','=',fecha_asiento)]).mapped('inverse_company_rate')
 
                             else:
-                                fecha_asiento = self.env['account.move'].search([('stock_move_id','=',l.get('id')),('state','=','posted')]).date
+                                fecha_asiento = self.env['account.move'].search([('stock_move_id','=',l.get('id')),('state','=','posted'),('amount_total','>',0)]).date
                                 tipo_cambio = self.env['res.currency.rate'].search([('name','<=',fecha_asiento)]).mapped('inverse_company_rate')
-                                
+
+                            logger.warning("---4 kardex---")  
                             if fecha_asiento:
                                 primer_tipo_cambio = tipo_cambio[0]
                                 precio_unitario_sql_valor = l.get('precio_unit_asiento')
@@ -390,6 +388,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                                 precio_unitario_sql_valor = 0
                                 subtotal_sql_valor = 0
 
+                            logger.warning("---5 kardex---")
                             data_diccionario = {
                                 'id':l.get('id'),
                                 'product_id':l.get('product_id'),
@@ -423,6 +422,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                                 'nombre_cc':l.get('nombre_cc'),
                                 'tipo_cambio':primer_tipo_cambio
                             }
+                            logger.warning("---6 kardex---")
                             if data_diccionario['usage_dest_id'] == 'internal':
 
                                 if data_diccionario['usage_id'] == 'supplier':
