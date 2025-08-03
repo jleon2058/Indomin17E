@@ -1,0 +1,71 @@
+<odoo>
+    <!-- Vista Tree personalizada para conductores -->
+    <record id="view_pickup_request_tree_driver_inherit" model="ir.ui.view">
+        <field name="name">pickup.request.tree.driver</field>
+        <field name="model">pickup.request</field>
+        <field name="inherit_id" ref="ind_purchase_pickup_request.view_pickup_request_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='requested_by']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='purchase_request_ids']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_vat']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='warehouse_observations']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='guia']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_done']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='days_difference']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='liquidation_status']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_number']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista Form personalizada para conductores -->
+    <record id="view_pickup_request_form_driver_inherit" model="ir.ui.view">
+        <field name="name">pickup.request.form.driver</field>
+        <field name="model">pickup.request</field>
+        <field name="inherit_id" ref="ind_purchase_pickup_request.view_pickup_request_form"/>
+        <field name="arch" type="xml">
+            <!-- Ocultar campos irrelevantes para conductores -->
+            <xpath expr="//field[@name='liquidation_status']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='picking_ids']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_number']" position="attributes">
+                <attribute name="groups">!ind_purchase_pickup_request.group_driver</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Acción específica para conductores -->
+    <record id="action_driver_pickup_request" model="ir.actions.act_window">
+        <field name="name">Pickup Requests (Drivers)</field>
+        <field name="res_model">pickup.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_pickup_request_tree_driver_inherit"/>
+        <field name="search_view_id" ref="ind_purchase_pickup_request.view_pickup_request_search"/>
+        <field name="context">{'search_default_pickup_pending': 1}</field>
+        <field name="groups_id" eval="[(6, 0, [ref('ind_purchase_pickup_request.group_driver')])]"/>
+    </record>
+    
+</odoo>

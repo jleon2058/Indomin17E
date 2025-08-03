@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_stock_transfer_label_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="label">
+                    <t t-set="qty" t-value="1"/>
+                    <t t-if="label.qty" t-set="qty" t-value="label.qty"/>
+                    <t t-foreach="list(range(qty))" t-as="index_qty">
+                        <div class="page" style="page-break-after: always;">
+                            <div style="height: 30mm; width: 78mm; display: flex; justify-content: center; align-items: center;">
+                                <table class="table" t-att-style="'height: 100%; width: 100%; border: {};'.format('%dpx solid #777;' % label.wizard_id.border_width if label.wizard_id.border_width else '0')">
+                                    <tr style="border: 0;">
+                                        <td class="text-center" style="padding: 0; margin: 0; border: 0;">
+                                            <div style="height: 2mm;"></div>
+                                            <div style="height: 6mm; font-size: 9px; line-height: 1.2; overflow: hidden;">
+                                                <span t-field="label.product_id.name"/>
+                                                <span t-if="label.product_id.product_template_attribute_value_ids"
+                                                      t-esc="u', '.join(map(lambda x: x.attribute_line_id.attribute_id.name + u': ' + x.name, label.product_id.product_template_attribute_value_ids))"
+                                                      class="badge"/>
+                                            </div>
+                                            <div style="height: 11mm; margin: 0; clear: both;">
+                                                <t t-set="base_url" t-value="request.env['ir.config_parameter'].sudo().get_param('web.base.url')"/>
+
+                                                <div t-if="label.product_id.barcode" class="text-center align-middle" style="height: 100%;">
+                                                    <t t-if="label.wizard_id.humanreadable" t-set="show_code" t-value="1"/>
+                                                    <t t-else="" t-set="show_code" t-value="0"/>
+                                                    <img alt="Barcode" t-if="len(label.product_id.barcode) == 13"
+                                                         t-att-src="base_url + '/report/barcode/%s/%s?width=300&amp;height=100&amp;humanreadable=%s' % ('EAN13', label.product_id.barcode, show_code)"
+                                                         style="overflow: hidden; width: 100%; height: 100%;"/>
+                                                    <img alt="Barcode" t-elif="len(label.product_id.barcode) == 8"
+                                                         t-att-src="base_url + '/report/barcode/%s/%s?width=300&amp;height=100&amp;humanreadable=%s' % ('EAN8', label.product_id.barcode, show_code)"
+                                                         style="overflow: hidden; width: 100%; height: 100%;"/>
+                                                    <img alt="Barcode" t-else=""
+                                                         t-att-src="base_url + '/report/barcode/%s/%s?width=300&amp;height=100&amp;humanreadable=%s' % ('Code128', label.product_id.barcode, show_code)"
+                                                         style="overflow: hidden; width: 100%; height: 100%;"/>
+                                                </div>
+                                            </div>
+                                            <div style="height: 3mm; font-size: 9px; line-height: 1.2; text-align: center;">
+                                                <span t-field="label.product_id.default_code"/>
+                                            </div>
+                                            <div style="height: 2.5mm; font-size: 6px; line-height: 1.2; text-align: center;">
+                                                <span t-field="label.origin"/>
+                                            </div>
+                                            <div style="height: 2.5mm; font-size: 6px; line-height: 1.2; text-align: center;">
+                                                <span t-field="label.account_analytic_id.code"/>
+                                            </div>
+                                            <div style="height: 2.5mm; font-size: 6px; line-height: 1.2; text-align: center;">
+                                                <span t-field="label.date_done"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_products_80x30_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="label">
+                    <t t-set="qty" t-value="1"/>
+                    <t t-if="label.qty" t-set="qty" t-value="label.qty"/>
+                    <t t-foreach="list(range(qty))" t-as="index_qty">
+                        <div class="page" style="page-break-after: always;">
+                            <div style="height: 30mm; width: 78mm; display: flex; justify-content: center; align-items: center;">
+                                <table class="table" t-att-style="'height: 100%; width: 100%; border: {};'.format('%dpx solid #777;' % label.wizard_id.border_width if label.wizard_id.border_width else '0')">
+                                    <tr style="border: 0;">
+                                        <td class="text-center" style="padding: 0; margin: 0; border: 0;">
+                                            <div style="height: 3mm;"></div>
+                                            <div style="height: 9mm; font-size: 11px; line-height: 1.2; overflow: hidden;">
+                                                <span t-field="label.product_id.name"/>
+                                                <span t-if="label.product_id.product_template_attribute_value_ids"
+                                                      t-esc="u', '.join(map(lambda x: x.attribute_line_id.attribute_id.name + u': ' + x.name, label.product_id.product_template_attribute_value_ids))"
+                                                      class="badge"/>   
+                                            </div>
+                                            <div style="height: 12mm; margin: 0; clear: both;">
+                                                <div t-if="label.product_id.barcode" class="text-center align-middle" style="height: 100%;">
+                                                    <t t-if="label.wizard_id.humanreadable" t-set="show_code" t-value="1"/>
+                                                    <t t-else="" t-set="show_code" t-value="0"/>
+                                                    <t t-set="base_url" t-value="request.env['ir.config_parameter'].sudo().get_param('web.base.url')"/>
+
+                                                    <img alt="Barcode" t-if="len(label.product_id.barcode) == 13"
+                                                         t-att-src="base_url + '/report/barcode/%s/%s?width=300&amp;height=100&amp;humanreadable=%s' % ('EAN13', label.product_id.barcode, show_code)"
+                                                         style="overflow: hidden; width: 100%; height: 100%;"/>
+                                                    <img alt="Barcode" t-elif="len(label.product_id.barcode) == 8"
+                                                         t-att-src="base_url + '/report/barcode/%s/%s?width=300&amp;height=100&amp;humanreadable=%s' % ('EAN8', label.product_id.barcode, show_code)"
+                                                         style="overflow: hidden; width: 100%; height: 100%;"/>
+                                                    <img alt="Barcode" t-else=""
+                                                         t-att-src="base_url + '/report/barcode/%s/%s?width=300&amp;height=100&amp;humanreadable=%s' % ('Code128', label.product_id.barcode, show_code)"
+                                                         style="overflow: hidden; width: 100%; height: 100%;"/>
+                                                </div>
+                                            </div>
+                                            <div style="height: 5mm; font-size: 10px; line-height: 1.2; text-align: center;">
+                                                <span t-field="label.product_id.default_code"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

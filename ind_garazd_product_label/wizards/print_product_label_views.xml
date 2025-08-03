@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_print_label_from_stock_picking" model="ir.actions.act_window">
+        <field name="name">Etiquetas</field>
+        <field name="res_model">print.product.label</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'default_picking_ids': active_ids}</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_view_types">form</field>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

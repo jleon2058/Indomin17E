@@ -1,0 +1,15 @@
+=====================================
+Guía de actualización del módulo
+=====================================
+
+-----Models in module 'dv_stock_move_analytic_account_field'-----
+-------------------------------------------------
+
+--------------------Fields in module 'dv_stock_move_analytic_account_field'--------------------
+DEL FIELD stock.move / picking_type_code
+DEL FIELD stock.move / account_analytic_id
+
+DEL FIELD stock.picking / account_analytic_id
+
+UPD FIELD stock.valuation.layer / account_analytic_id -> analytic_distribution
+-------------------------------------------------------------------------------

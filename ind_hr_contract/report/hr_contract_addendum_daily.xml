@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_print_addendum_daily" model="ir.actions.report">
+        <field name="name">Imprimir Adenda V2</field>
+        <field name="model">hr.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ind_hr_contract.print_addendum_daily</field>
+        <field name="report_file">ind_hr_contract.print_addendum_daily</field>
+        <field name="print_report_name">'Adenda - %s' % (object.name).replace('/', '')</field>
+        <field name="binding_model_id" ref="model_hr_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="print_addendum_daily">
+    <t t-call="web.basic_layout">
+        <div class="page">
+            <!-- Header -->
+            <div class="header">
+                <br/><br/>
+                <p class="header-addend-daily">ADENDA CONTRATO DE TRABAJO SUJETO A MODALIDAD</p>
+                <p class="header-addend-daily">Art. 57º TUO D. LEG. 728, aprobado por D.S. Nº 003-97-TR</p>
+            </div>
+
+            <!-- Body -->
+            <div class="container">
+                <t t-foreach="docs" t-as="employee">
+                    <p class="parrafo-estilo-addend-daily">
+                        Conste por el presente documento la adenda de renovación de contrato de Trabajo de Naturaleza
+                        Temporal por Incremento de Actividad de conformidad con el Art. 57º del Texto Único Ordenado (TUO) 
+                        de la Ley de Productividad y Competitividad Laboral, aprobado por D.S. Nº 003-97-TR, que celebran
+                        de una parte la empresa <strong>INDUSTRIES OIL AND MINING S.A.C.</strong> con RUC <strong>20516228394</strong>, 
+                        y con domicilio real en Urb. Bacilio López Silva Mz. E lote 4 - Callao - Callao - Callao, debidamente 
+                        representada por su Gerente <strong>JOSÉ FERRIOL QUESQUÉN OSPINA</strong>, identificado con DNI Nº,
+                        <strong>25573250</strong>, en adelante el EMPLEADOR, y de la otra parte, Sr. 
+                            <strong> <t t-esc='employee.employee_id.name'/> </strong>
+                        identificado con DNI N° 
+                            <strong> <t t-esc='employee.employee_id.identification_id'/> </strong>
+                        con domicilio en
+                            <strong> <t t-esc='employee.employee_id.private_street'/> </strong>
+                        -
+                            <strong> <t t-esc='employee.employee_id.private_zip'/> </strong>
+                        -
+                            <strong> 
+                                <t t-if="employee.employee_id.private_city == 'Hua ncayo'">
+                                    Huancayo
+                                </t>
+                                <t t-else="">    
+                                    <t t-esc='employee.employee_id.private_city'/> 
+                                </t>
+                            </strong>
+                        -
+                            <strong> <t t-esc='employee.employee_id.private_state_id.name'/> </strong>
+                        , en adelante el TRABAJADOR, 
+                        en los términos y condiciones siguientes:
+                    </p>
+                    <p class="titulo-estilo-addend-daily">
+                        <strong>PRIMERO.-</strong>
+                    </p>
+                    <p class="parrafo-estilo-addend-daily">
+                        EL TRABAJADOR viene prestando sus servicios bajo la dirección de EL EMPLEADOR desde 
+                            <strong> <t t-esc='employee.date_start .strftime("%d/%m/%Y")'/> </strong>, 
+                        realizando labores como 
+                            <strong> <t t-esc='employee.job_id.name'/> </strong>
+                        , a cambio de una remuneración básica mensual.
+                        A partir de la renovación de fecha 01/01/2023, la contraprestación se establece en la suma
+                        de 
+                            <t t-set="wage" t-value="employee.wage"/>
+                            <strong>
+                            <t t-esc="'%.2f' % wage"/>  
+                            </strong>
+                            <strong>
+                            ( <t t-esc="int(wage)"/> y 
+                             <t t-esc="'%02d' % int(round((wage - int(wage)) * 100))"/>/100 Soles )
+                            </strong>
+                        , cuya periodicidad de pago será mensual, de la cual se deducirán los descuentos, aportaciones 
+                        y tributos que fueran aplicables de acuerdo a ley, así como aquellas que este autorice de manera
+                         voluntaria, en forma expresa y por escrito; manteniéndose las demás condiciones del contrato 
+                         de trabajo primigenio y/o renovaciones vigentes.
+                    </p>
+                    <p class="titulo-estilo-addend-daily">
+                        <strong>SEGUNDO.-</strong>
+                    </p>
+                    <p class="parrafo-estilo-addend-daily">
+                        Modifíquese el plazo de vigencia señalado en la Cláusula QUINTA del contrato de trabajo primigenio y/o 
+                        renovaciones vigentes, teniendo que, a través del presente contrato, se amplía el plazo de vigencia por
+                        un período de 
+                            <strong> 
+                                <t t-if='employee.diferencia_dias != 0'>
+                                    <t t-if='employee.diferencia_meses == 1'>
+                                                <t t-esc='employee.diferencia_meses'/> 
+                                                (<t t-esc='employee.dif_meses_text'/>)
+                                        mes y
+                                    </t>
+                                    <t t-elif='employee.diferencia_meses == 0'>
+                                    </t>
+                                    <t t-else=''>
+                                                <t t-esc='employee.diferencia_meses'/> 
+                                                (<t t-esc='employee.dif_meses_text'/>)
+                                        meses y
+                                    </t>
+                                            <t t-esc='employee.diferencia_dias'/> 
+                                            (<t t-esc='employee.dif_dias_text'/>) 
+                                    días
+                                </t>
+                                <t t-else=''>
+                                    <t t-if='employee.diferencia_meses == 1'>
+                                                <t t-esc='employee.diferencia_meses'/> 
+                                                (<t t-esc='employee.dif_meses_text'/>)
+                                        mes
+                                    </t>
+                                    <t t-elif='employee.diferencia_meses == 0'>
+                                    </t>
+                                    <t t-else=''>
+                                                <t t-esc='employee.diferencia_meses'/> 
+                                                (<t t-esc='employee.dif_meses_text'/>)
+                                        meses
+                                    </t>
+                                </t>
+                            </strong>
+                        , que se inicia a partir del 
+                            <strong> <t t-esc='employee.date_start.strftime("%d/%m/%Y")'/> </strong>
+                        al 
+                            <strong> <t t-esc='employee.date_end.strftime("%d/%m/%Y")'/> </strong>, 
+                        día en cual culminará automáticamente sin necesidad de preaviso alguno.
+                    </p>
+                    <p class="titulo-estilo-addend-daily">
+                        <strong>TERCERO.-</strong>
+                    </p>
+                    <p class="parrafo-estilo-addend-daily">
+                        EL TRABAJADOR queda prohibido de poseer, comprar, vender, repartir, elaborar, transportar o estar bajo 
+                        influencia de algún licor, droga, narcótico o análogos mientras estén trabajando o se encuentre en las 
+                        instalaciones de EL EMPLEADOR por ninguna razón.
+                    </p>
+                    <p class="titulo-estilo-addend-daily">
+                        <strong>CUARTO.- </strong>
+                    </p>
+                    <p class="parrafo-estilo-addend-daily">
+                        Ambas partes acuerdan dejar sin efecto la Clausula “Décimo Quinta” del contrato inicial.
+                    </p>
+                    <p class="parrafo-estilo-addend-daily">
+                        Firmado por las partes en señal de conformidad el 
+                            <strong> <t t-esc='employee.date_signature_text'/> </strong>
+                        .
+                        <br/><br/><br/><br/><br/>
+
+                        <table style="margin-right: 80px; margin-left: 80px;">
+                            <tr style="text-align: left">
+                                <td style="text-align: center; width:33.33%">…………………………………………………</td>
+                                <td style="text-align: center; width:33.33%">…………………………………………………</td>
+                            </tr>
+                            <tr style="font-size: 10.5pt; text-align:rigth">
+                                <td style="text-align: center; width:33.33%">
+                                    EL TRABAJADOR<br/>
+                                    <strong> <t t-esc='employee.employee_id.name'/> </strong><br/>
+                                    <strong> DNI N° <t t-esc='employee.employee_id.identification_id'/> </strong>
+                                </td>
+                                <td style="text-align: center; width:33.33%">EL EMPLEADOR</td>
+                            </tr>
+                        </table>
+                    </p>
+                </t>
+            </div>
+        </div>
+    </t>
+</template>
+</odoo>

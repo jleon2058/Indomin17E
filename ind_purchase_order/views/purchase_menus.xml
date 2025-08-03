@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_purchase_order_volume_approved_report_wizard"
+        name="Reporte de OC aprobadas"
+        action="action_volume_approved_wizard"
+        parent="purchase.purchase_report_main"
+    />
+
+    <menuitem
+        id="menu_purchase_order_report_wizard"
+        name="Reporte de OC"
+        action="action_purchase_order_wizard"
+        parent="purchase.purchase_report_main"
+    />
+
+    <menuitem
+        id="menu_rfq_approved_report_wizard"
+        name="Reporte OC, aprobados"
+        action="action_rfq_approved_wizard"
+        parent="purchase.purchase_report_main"
+    />
+
+</odoo>

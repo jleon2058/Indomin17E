@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_general_entry_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page" style="font-size: 12px;">
+                    <p style="text-align: left; font-weight: bold; font-size: 14px;">
+                        <t t-esc="o.company_id.name"/>
+                    </p>
+                    <h2 style="text-align: center;">Reporte de Asientos Contables</h2>
+                    <table class="table table-sm" style="width: 100%; table-layout: fixed; word-wrap: break-word; border-collapse: collapse;">
+                        <thead style="background-color: #f0f0f0;">
+                            <tr style="text-align: center;">
+                                <th style="border: 1px solid #000;">Razon Social</th>
+                                <th style="border: 1px solid #000;">Referencia</th>
+                                <th style="border: 1px solid #000;">Fecha</th>
+                                <th style="border: 1px solid #000;">Diario</th>
+                                <th style="border: 1px solid #000;">Numero de Asiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="text-align: center;">
+                                <td style="border: 1px solid #000;"><t t-esc="o.partner_id.display_name if o and o.partner_id else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="o.ref if o and o.ref else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="o.date if o and o.date else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="o.journal_id.name if o and o.journal_id else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="o.seat_number if o and o.seat_number else '-'"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin-top: 20px; text-align: left;">Lineas del Asiento</h3>
+                    <table class="table table-sm" style="width: 100%; table-layout: fixed; word-wrap: break-word; border-collapse: collapse;">
+                        <thead style="background-color: #f0f0f0; font-size: 15px">
+                            <tr style="text-align: center;">
+                                <th style="border: 1px solid #000;">Cuenta</th>
+                                <th style="border: 1px solid #000;">Socio</th>
+                                <th style="border: 1px solid #000;">Descripcion</th>
+                                <th style="border: 1px solid #000;">Monto Moneda</th>
+                                <th style="border: 1px solid #000;">Moneda</th>
+                                <th style="border: 1px solid #000;">Debe</th>
+                                <th style="border: 1px solid #000;">Haber</th>
+                                <th style="border: 1px solid #000;">Fecha Documento</th>
+                                <th style="border: 1px solid #000;">Fecha Vencimiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.line_ids if o and o.line_ids else []" t-as="line" style="text-align: center;">
+                                <td style="border: 1px solid #000;"><t t-esc="line.account_id.display_name if line and line.account_id else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.partner_id.display_name if line and line.partner_id else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.name if line and line.name else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.amount_currency if line and line.amount_currency else '0.00'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.currency_id.name if line and line.currency_id else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.debit if line and line.debit else '0.00'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.credit if line and line.credit else '0.00'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.fecha_doc if line and line.fecha_doc else '-'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="line.fecha_vence if line and line.fecha_vence else '-'"/></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="text-align: center;">
+                                <td colspan="5" style="font-weight: bold;">Totales:</td>
+                                <td style="border: 1px solid #000;"><t t-esc="round(sum(float(line.debit or 0.0) for line in o.line_ids), 3) if o and o.line_ids else '0.00'"/></td>
+                                <td style="border: 1px solid #000;"><t t-esc="round(sum(float(line.credit or 0.0) for line in o.line_ids), 3) if o and o.line_ids else '0.00'"/></td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <br></br>
+                    <br></br>
+                    <div style="margin-top: 50px; font-size: 15px;">
+                        <table style="width: 100%; text-align: center;">
+                            <tr>
+                                <td>
+                                    _______________________________<br/>
+                                    Hecho por
+                                </td>
+                                <td>
+                                    _______________________________<br/>
+                                    Visto Bueno
+                                </td>
+                                <td>
+                                    _______________________________<br/>
+                                    Tesoreria
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

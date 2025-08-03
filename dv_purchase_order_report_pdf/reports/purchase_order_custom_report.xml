@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="purchase_order_custom_report" name="Orden de Compra" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div/div[2]" position="replace">
+            <div id="informations" class="row mt32 mb32">
+                <div t-if="o.user_id" class="col-6 bm-2">
+                    <strong>Representante de Compra:</strong>
+                    <p t-field="o.user_id" class="m-0"/>
+                </div>
+                <div t-if="o.date_order" class="col-6 bm-2">
+                    <strong>Fecha de Pedido:</strong>
+                    <p t-field="o.date_order" class="m-0"/>
+                </div>
+            </div>
+        </xpath>
+        
+        <xpath expr="/t/t/div/div[1]" position="after">
+            <br/>
+            <div class="row">
+                <div class="col-6">
+                    <strong>Plazos de pago:</strong>
+                    <span t-field="o.payment_term_id.name"/>
+                </div>
+                <div class="col-6">
+                    <strong>RUC:</strong>
+                    <span t-field="o.partner_id.vat"/>
+                </div>
+            </div>
+            <br/>
+        </xpath>
+        <xpath expr="//div[1]" position="replace">
+            <div style="margin-left: -71px;">
+                <strong>Proveedor</strong>
+            </div>
+            <div style="margin-left: -71px;">
+                <span t-field="o.partner_id.name"/>
+                <br/>
+                <span t-field="o.partner_id.contact_address_complete"/>
+            </div>
+        </xpath>
+
+        <xpath expr="//div[contains(@class, 'mt-4')]" position="replace">
+            <div class="mt-4">
+                <h2 t-if="o.state in ['draft', 'sent', 'to approve']">Solicitud de Presupuesto N°<span t-field="o.name"/></h2>
+                <h2 t-if="o.state in ['purchase', 'done']">Orden de Compra N°<span t-field="o.name"/></h2>
+                <h2 t-if="o.state == 'cancel'">Orden de Compra Cancelada N°<span t-field="o.name"/></h2>
+            </div>
+        </xpath>
+
+        <xpath expr="//th[@name='th_price_unit']" position="replace">
+            <th name="th_price_unit" class="text-end">
+                <strong>P. Unit</strong>
+            </th>
+        </xpath>
+        <xpath expr="//th[@name='th_discount']" position="replace">
+            <th name="th_discount" class="text-end">
+                <strong>Desc.</strong>
+            </th>
+        </xpath>
+
+        <xpath expr="//th[@name='th_taxes']" position="replace">
+            <th name="th_taxes" class="text-end">
+                <strong>Imp.</strong>
+            </th>
+        </xpath>
+
+        <xpath expr="//th[@name='th_subtotal']" position="replace">
+            <th name="th_subtotal" class="text-end">
+                <strong>Total</strong>
+            </th>
+        </xpath>
+        
+        <xpath expr="/t[1]/t[1]/t[4]/t[1]/div[1]/div[1]" position="attributes">
+            <attribute name="t-options-separator">","</attribute>
+        </xpath>
+        <xpath expr="//td[@id='product']" position="replace">
+            <td id="product">
+                <t t-if='line.product_id.display_name != line.name'>
+                    <span t-field="line.product_id.display_name"/>
+                </t>
+                <span t-field="line.name"/>
+            </td>
+        </xpath>
+        <xpath expr="//th[@name='th_taxes']" position="after">
+            <th name="th_ce_co" class="text-right">
+                <strong>Ce-co</strong>
+            </th>
+            
+        </xpath>
+        <xpath expr="//td[@name='td_taxes']" position="after">
+            <td class="text-center" groups="analytic.group_analytic_accounting">
+                <t t-if="line.analytic_distribution">
+                    <t t-foreach="line.analytic_distribution.items()" t-as="ad">
+                        <t t-set="analytic_id" t-value="ad[0]"/>
+                        <t t-set="analytic_code" t-value="env['account.analytic.account'].browse(int(analytic_id)).code"/>
+                        <span t-esc="analytic_code"/>
+                    </t>
+                </t>
+                <t t-else="">
+                    <span>N/A</span>
+                </t>
+            </td>
+        </xpath>
+
+        <xpath expr="//table/thead/tr/th[@name='th_date_req']" position="replace">
+            <th name="th_date_req" class="text-center" t-if="False"><strong>Date Req.</strong></th>
+        </xpath><xpath expr="//table/thead/tr/th[@name='th_taxes']" position="replace">
+            <th name="th_taxes" class="text-end" t-if="False"><strong>Taxes</strong></th>
+        </xpath>
+        <xpath expr="//table/tbody/t/tr/t/td[2]" position="replace">
+            <td class="text-center" t-if="False">
+                <span t-field="line.date_planned"/>
+            </td>
+        </xpath>
+         <xpath expr="//table/tbody/t/tr/t/td[6]" position="replace">
+            <td name="td_taxes" t-if="False" t-attf-class="text-end {{ 'text-nowrap' if len(taxes) &lt; 10 else '' }}">
+                <span t-out="taxes">Tax 15%</span>
+            </td>
+        </xpath>
+        <xpath expr="//div[@class='page']" position="before">
+        <!-- Marca de agua centrada -->
+        <div t-if="report_type == 'pdf'" style="
+            position: relative;
+            top: 200px;
+            left: 20px;
+            -webkit-transform:rotate(-45deg);
+            text-align: center;
+            color: coral;
+            font-size: 6em;
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+            font-weight: bold;
+        ">
+        <t t-if="o.state not in ['purchase','done']">
+            SIN VALOR
+        </t>
+        </div>
+        </xpath>
+    </template>
+</odoo>

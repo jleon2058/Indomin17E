@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_print_first_contract" model="ir.actions.report">
+        <field name="name">Imprimir Contrato</field>
+        <field name="model">hr.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ind_hr_contract.print_first_contract_form</field>
+        <field name="report_file">ind_hr_contract.print_first_contract_form</field>
+        <field name="print_report_name">'Contrato - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hr_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="print_first_contract_form">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="employee">
+                <div class=".header-first-contract" >
+                    <strong>
+                        <p style="text-align: center; margin-top: 0px; page-break-before: always;">CONTRATO DE TRABAJO DE NATURALEZA TEMPORAL POR INCREMENTO DE ACTIVIDAD</p>
+                    </strong>
+                </div>                
+                <div class="container" style="text-align: justify; margin-top: 0px;">
+                    
+                        <p class="parrafo-estilo-contract">
+                            Conste por el presente documento El contrato Temporal de Trabajo que celebran de una parte 
+                            <strong>INDUSTRIES OIL AND MINING SAC</strong> con RUC N° 20516228394, debidamente representado por el Sr. 
+                            José Ferriol Quesquén Ospina identificado con DNI N° 25573250, señalando domicilio en Urb. 
+                            Bacilio Lopez Silva Mz E Lt 4 - Callao; a quien en adelante se le denominará “LA EMPRESA”, 
+                            y de la otra parte el Sr.
+                                <strong> <t t-esc='employee.employee_id.name'/> </strong>
+                            con DNI N° 
+                                <strong> <t t-esc='employee.employee_id.identification_id'/> </strong>
+                            con domicilio en
+                                <strong> <t t-esc='employee.employee_id.private_street'/> </strong>
+                            , distrito de 
+                                <strong> <t t-esc='employee.employee_id.private_zip'/> </strong>
+                            , provincia de 
+                                <strong> 
+                                    <t t-if="employee.employee_id.private_city == 'Hua ncayo'">
+                                        Huancayo
+                                    </t>
+                                    <t t-else="">    
+                                        <t t-esc='employee.employee_id.private_city'/> 
+                                    </t>
+                                </strong>
+                            y departamento de 
+                                <strong> <t t-esc='employee.employee_id.private_state_id.name'/> </strong>
+                            , a quien en adelante se le denominará “EL TRABAJADOR”, en los términos y condiciones siguientes:
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA PRIMERA.- DE LAS PARTES</strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            LA EMPRESA es una persona jurídica, privada cuyo objeto social es brindar servicios de Alquiler - 
+                            Mantenimiento - Reparación de equipos mineras y comercializar productos hidráulicos y que debido 
+                            al actual incremento de sus operaciones requiere contratar un 
+                                <strong> <t t-esc='employee.job_id.name'/> </strong>
+                            , el TRABAJADOR (A) deberá cumplir las normas y/o directivas internas, las contenidas en el Reglamento
+                            Interno de Trabajo, las normas laborales vigentes y las que imparta LA EMPRESA por necesidades del 
+                            servicio en de su facultad de dirección de conformidad  con el Artículo 57° del Decreto Supremo  N° 
+                            003-97- TR. Texto Único Ordenado del D. Leg. 728 (Ley de Fomento del Empleo) – Ley de Productividad y 
+                            Competitividad Laboral.  Siendo en razón de lo anteriormente expuesto, LA EMPRESA acuerda mediante el 
+                            presente documento celebrar con EL TRABAJADOR (A) un contrato de trabajo de Naturaleza Temporal por 
+                            incremento de actividades.
+                            <br/><br/>
+                            Asimismo, EL TRABAJADOR (A) se compromete a no prestar servicios para terceros, ni a desarrollar 
+                            actividades por cuenta propia o ajena dentro o fuera del horario de trabajo que impliquen y afecten de 
+                            alguna forma la ejecución de actividades y que compitan con el trabajo que realiza para la empresa, así 
+                            como a las actividades que desarrolla para LA EMPRESA.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA SEGUNDA.- OBJETO DEL CONTRATO</strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            EL TRABAJADOR es una persona natural que tiene la condición EMPLEADO y que en la prestación de sus servicios 
+                            está obligado a cumplir las labores que se le asigne LA EMPRESA de acuerdo a las necesidades de operación. 
+                            EL (LA) TRABAJADOR (A) se obliga especialmente a desarrollar a favor de LA EMPRESA toda su capacidad de trabajo.  
+                            En el desempeño de labores principales, afines y asesorías inherentes al puesto que desempeña. EL (LA) 
+                            TRABAJADOR (A) cumplirá con las funciones, órdenes e instrucciones que le imparta LA EMPRESA a través de 
+                            sus representantes 
+                            <br/><br/>
+                            EL TRABAJADOR tiene la obligación de cumplir con los plazos y planes de trabajo establecidos y coordinados 
+                            con sus jefes inmediatos y Gerencias de LA EMPRESA.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA TERCERA. - JORNADA Y HORARIO DE TRABAJO</strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            EL TRABAJADOR (A) deberá prestar sus servicios de acuerdo a los horarios y jornadas establecidas por la 
+                            empresa. LA EMPRESA en ejercicio de su facultad directiva podrá variar estos horarios estableciendo nuevos 
+                            turnos y horarios de trabajo, de acuerdo a sus necesidades de operación y dentro del marco legal 
+                            correspondiente.
+                            <br/><br/>
+                            Queda expresamente convenido que en el ejercicio de su facultad directiva, LA EMPRESA podrá asignar a EL 
+                            (LA) TRABAJADOR (A) labores o funciones en la misma área o en otras áreas de LA EMPRESA, e incluso disponer 
+                            que desarrollen sus labores en lugares fuera de la ciudad de Lima o fuera del territorio del Perú.
+                            <br/><br/>
+                            Asimismo, se deja constancia que se considera como falta severa o grave el incumplimiento del horario de 
+                            ingreso establecido por LA EMPRESA hacia EL TRABAJADOR, siendo la continuidad o repetición de tardanzas 
+                            materia de amonestación y despido.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA CUARTA.- REMUNERACIÓN </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            LA EMPRESA deja constancia que pagará en contraprestación por los servicios EL TRABAJADOR le presta, 
+                            una remuneración mensual de S/
+                                <t t-set="wage" t-value="employee.wage"/>
+                                <strong>
+                                <t t-esc="'%.2f' % wage"/>  
+                                </strong>
+                                <strong>
+                                ( <t t-esc="int(wage)"/> y 
+                                <t t-esc="'%02d' % int(round((wage - int(wage)) * 100))"/>/100 Soles )
+                            </strong>
+                            , suma sobre la cual se efectuarán los beneficios y retenciones que por Ley correspondan.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA QUINTA.- PLAZO DE VIGENCIA  </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            El presente contrato tiene una duración de 
+                                <strong> 
+                                    <t t-if='employee.diferencia_dias != 0'>
+                                        <t t-if='employee.diferencia_meses == 1'>
+                                                    <t t-esc='employee.diferencia_meses'/> 
+                                                    (<t t-esc='employee.dif_meses_text'/>)
+                                            mes y
+                                        </t>
+                                        <t t-elif='employee.diferencia_meses == 0'>
+                                        </t>
+                                        <t t-else=''>
+                                                    <t t-esc='employee.diferencia_meses'/> 
+                                                    (<t t-esc='employee.dif_meses_text'/>)
+                                            meses y
+                                        </t>
+                                                <t t-esc='employee.diferencia_dias'/> 
+                                                (<t t-esc='employee.dif_dias_text'/>) 
+                                        días
+                                    </t>
+                                    <t t-else=''>
+                                        <t t-if='employee.diferencia_meses == 1'>
+                                                    <t t-esc='employee.diferencia_meses'/> 
+                                                    (<t t-esc='employee.dif_meses_text'/>)
+                                            mes
+                                        </t>
+                                        <t t-elif='employee.diferencia_meses == 0'>
+                                        </t>
+                                        <t t-else=''>
+                                                    <t t-esc='employee.diferencia_meses'/> 
+                                                    (<t t-esc='employee.dif_meses_text'/>)
+                                            meses
+                                        </t>
+                                    </t>
+                                </strong>
+                            , contados a partir del 
+                                <strong> <t t-esc='employee.date_start.strftime("%d/%m/%Y")'/> </strong>
+                            hasta el 
+                                <strong> <t t-esc='employee.date_end.strftime("%d/%m/%Y")'/> </strong>
+                            pudiendo renovarse previo acuerdo de ambas partes y a criterio de LA EMPRESA, por periodos semestrales 
+                            o anuales, salvo decisión expresa de LA EMPRESA de modificar el periodo de permanencia antes indicado.
+                            Igualmente, cualquiera de las partes puede resolver este contrato con un aviso de 15 días.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA SEXTA. - TÉRMINO DEL CONTRATO  </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            Queda entendido que EL EMPLEADOR no está obligado a dar aviso alguno adicional referente al término del
+                            presente contrato, operando su extinción a la expiración del plazo.  
+                            <br/><br/>
+                            Las llamadas de atención verbales y memorándums escritos, aplicables al trabajador por negligencia 
+                            y FALTAS GRAVES, que representen riesgo a las operaciones y otros referidos a responsabilidad estricta 
+                            de su cargo, serán considerados como faltas y analizadas, siendo EL TRABAJADOR responsable de asumir las 
+                            mismas a nivel económico y de proceso disciplinario laboral.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA SEPTIMA.- NORMAS APLICABLES  </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            EL TRABAJADOR, expresa su consentimiento escrito para que LA EMPRESA, en cualquier momento y sin previo 
+                            aviso a EL TRABAJADOR, pueda efectuarle exámenes toxicológicos intrusivos y no intrusivos para verificar
+                            el consumo de drogas ilícitas. Esto implica de acuerdo al TEXTO UNICO ORDENADO DEL D. LEG. Nº 728, 
+                            LEY DE PRODUCTIVIDAD Y COMPETITIVIDAD LABORAL DECRETO SUPREMO Nº 003-97-TR art. 25. Inciso e, que dice 
+                            textualmente: <em>“e) La concurrencia reiterada en estado de embriaguez o bajo influencia de drogas o sustancias 
+                            estupefacientes, y aunque no sea reiterada cuando por la naturaleza de la función o del trabajo revista 
+                            excepcional gravedad. La autoridad policial prestara su concurso para coadyuvar en la verificación de 
+                            tales hechos; la negativa del trabajador a someterse a la prueba correspondiente se considerará como 
+                            reconocimiento de dicho estado, lo que se hará constar en el atestado policial respectiva”</em> sea causal de despido.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA OCTAVA. -   </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            El TRABAJADOR reconoce que el objeto de su trabajo en LA EMPRESA se basa en la creación de elementos susceptibles
+                            de ser objeto de propiedad intelectual. En este sentido, los resultados del trabajo de este forman parte de una 
+                            obra colectiva de trabajo interno de LA EMPRESA cuya titularidad pertenece única y exclusivamente a LA EMPRESA, 
+                            no pudiendo reproducir por ningún, ni bajo ningún formato y/o publicar fuera de LA EMPRESA los mismos. Por ello, 
+                            EL TRABAJADOR cede expresamente, en exclusiva y con facultad de cesión a terceros a LA EMPRESA los derechos de 
+                            explotación en cualquier forma y en toda su extensión de los resultados de su trabajo, ya sean derechos de propiedad 
+                            intelectual, incluyendo cualquier componente original del mismo, que desarrolle para LA EMPRESA  y, en especial, 
+                            cede los derechos de reproducción, distribución, transformación, comunicación pública y cualesquiera otro derecho 
+                            necesario para la comercialización y/o explotación total o parcial, incluido material de publicidad aplicado a todas 
+                            sus labores. En virtud del derecho de transformación cedido, EL TRABAJADOR autoriza a que LA EMPRESA realice, directa
+                            o indirectamente, las modificaciones pertinentes de los resultados de su trabajo, cediendo también los derechos de 
+                            explotación con la extensión antes mencionada sobre las obras derivadas que en virtud de este párrafo se realicen.  
+                            <br/><br/>
+                            EL (LA) TRABAJADOR (A) tiene la obligación de guardar total y absoluta reserva, hasta después de cinco (5) años de 
+                            terminada la relación laboral que mantiene con LA EMPRESA, sobre todo tipo de información relacionada con las 
+                            actividades de LA EMPRESA, incluidas la calidad, capacidad, ubicación de ésta, características de equipos y 
+                            procedimientos internos, los softwares y tecnologías aplicadas, y  en general, respecto a todo tipo de conocimiento 
+                            a que hubiera tenido acceso EL (LA) TRABAJADOR (A) por efecto de los servicios que le prestara a LA EMPRESA en 
+                            virtud de este contrato; quedando prohibido EL (LA) TRABAJADOR (A) de utilizar dicha información y conocimientos 
+                            para sí, o para terceros y de divulgarla durante el referido plazo.  El incumplimiento de esta obligación dará 
+                            lugar a las sanciones legales por los daños y perjuicios ocasionados.
+                            <br/><br/>
+                            Por el presente documento, EL (LA) TRABAJADOR (A) cede y transfiere a LA EMPRESA en forma total, integra y exclusiva 
+                            los derechos patrimoniales derivados de los trabajos e informes que sean realizados en cumplimiento del presente contrato,
+                            quedando LA EMPRESA facultada para publicar o reproducir en forma íntegra o parcial dicha información.
+                            <br/><br/>
+                            En consecuencia, toda esta información creada u originada es de propiedad exclusiva de LA EMPRESA, quedando EL (LA)
+                            TRABAJADOR (A) prohibido de reproducirla, venderla o suministrarla a cualquier persona natural o jurídica, salvo 
+                            autorización escrita de LA EMPRESA.   Se deja constancia que la información comprende inclusive las investigaciones, 
+                            los borradores y los trabajos preliminares, EL (LA) TRABAJADOR (A) deberá devolver a LA EMPRESA toda la información 
+                            o material que se le hubiera entregado, conjuntamente con los originales facilitados una vez finalizada las labores 
+                            encomendadas.
+                            <br/><br/>
+                            EL (LA) TRABAJADOR (A) declara conocer que LA EMPRESA está obligada a salvaguardar el secreto de las comunicaciones y 
+                            a mantener la confidencialidad de los datos personales de sus empleados y clientes de acuerdo con la Constitución 
+                            Política del Perú y las normas legales aplicables.  En consecuencia EL (LA) TRABAJADOR (A) deberá ejecutar el presente 
+                            contrato en estricta observancia de tales normas.  En tal sentido EL (LA) TRABAJADOR (A) se obliga, sin que esta 
+                            enumeración se considere limitativa sino meramente enunciativa, a no sustraer, interceptar, interferir, cambiar, 
+                            divulgar, alterar, desviar, acceder, utilizar, publicar o facilitar el contenido o la existencia de cualquiera 
+                            comunicación o la información personal relativa a los empleados y clientes de LA EMPRESA.
+                            <br/><br/>
+                            Asimismo, EL (LA) TRABAJADOR (A) observará en todo momento la normativa interna sobre el derecho al secreto de las 
+                            comunicaciones y a la protección de datos personales de los clientes, la misma que declara conocer, cuya copia le ha 
+                            sido debidamente entregada por LA EMPRESA y a las instrucciones y pautas que a su sola discreción, LA EMPRESA emita
+                             para la protección de estos.
+                            <br/><br/>
+                            Queda establecido que el incumplimiento por parte de EL (LA) TRABAJADOR (A) de lo establecido en la presente cláusula 
+                            facultará a LA EMPRESA a resolver el presente convenio de manera automática, sin perjuicio de las demás 
+                            responsabilidades a que hubiere lugar y de la facultada de LA EMPRESA a iniciar las acciones legales que estime 
+                            pertinentes.   Asimismo EL (LA) TRABAJADOR (A)  deberá resarcir a LA EMPRESA los daños que le cause, ya sea por dolo,
+                            culpa grave o culpa leve, asumiendo especialmente las sanciones administrativas y judiciales impuestas a esta última 
+                            como consecuencia del referido incumplimiento y (b) los costos en los que la misma incurra en defensa administrativa 
+                            y judiciales de sus intereses.
+                            <br/><br/>
+                            La obligación de salvaguardar el secreto de las comunicaciones y la confidencialidad de los datos personales de los 
+                            clientes y proveedores se mantendrá vigente inclusive luego de haber concluido el presente contrato.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA NOVENA. - RECURSOS TECNOLÓGICOS  </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            En relación con los medios de trabajo proporcionados por LA EMPRESA, en especial medios informáticos y medios 
+                            telemáticos, EL (LA) TRABAJADOR (A) reconoce y admite expresamente lo siguiente:
+                            <br/>
+                            <ol class="custom-list">
+                                <li> Debe velar por el cuidado de los equipos asignados a su persona para el desarrollo interno o externo
+                                del desarrollo de su trabajo, de culminarse el vínculo laboral, los equipos deben ser devueltos de manera inmediata,
+                                en óptimas condiciones. </li><br/>
+                                <li> Asimismo, del uso de la computadora.- EL TRABAJADOR contará con un recurso de almacenamiento de acuerdo 
+                                al perfil del puesto asignado, debiendo guardar dentro de este recurso de almacenamiento toda información relacionada a su trabajo SIN EXCEPCIÓN alguna.</li><br/>
+                                <li> LA EMPRESA, sin necesidad de consulta o requerimiento alguno, tendrá acceso en todo momento a toda 
+                                la información que contengan las computadoras, salvo a la información personal de EL (LA) TRABAJADOR (A).</li><br/>
+                                <li> Queda totalmente prohibido el uso de los sistemas de información de LA EMPRESA para los siguientes usos:</li><br/>
+                                    <ol style="list-style-type: none;">
+                                        <li>1.1 Adherirse a cualquier comunicado que se ilegal o una violación de cualquier política o estándar de LA EMPRESA, 
+                                        incluyendo entre otros aquellos comunicados que sean difamatorios, obscenos, racistas, sexistas o que evidencian 
+                                        tendenciosidad religiosa.</li>
+                                        <li>1.2 El uso de los sistemas de información para cualquier asunto ajeno a LA EMPRESA así como para ocio o pasatiempo.</li>
+                                        <li>1.3 El envío, reenvío, distribución o respuesta de “cadenas” informáticas.</li><br/>
+                                    </ol>
+                                <li> El correo electrónico, el teléfono y cuantos medios de comunicación ponga LA EMPRESA a disposición de EL (LA) 
+                                TRABAJADOR (A), serán utilizados, únicamente con los fines profesionales y propios del trabajo.  EL (LA) TRABAJADOR (A) 
+                                autoriza expresamente a LA EMPRESA par que pueda acceder en cualquier momento al contenido de los correos electrónicos 
+                                o de las comunicaciones personales de EL (LA) TRABAJADOR (A) contenidos o existentes en los medios de informáticos de 
+                                comunicación u otros equipos que LA EMPRESA pone a su disposición para fines exclusivamente laborales.  En caso de que 
+                                EL (LA) TRABAJADOR (A) desee emplear los medios de comunicación para fines particulares, deberá recabar previamente el 
+                                consentimiento expreso de LA EMPRESA.  Queda exceptuado de la presente restricción el uso ocasional del equipo telefónico 
+                                para asuntos personales de urgencia.</li><br/>
+                                <li> Queda prohibida la reproducción o copia de los programas, bases de datos, informes, y toda información contenida en 
+                                las computadoras y documentos internos de LA EMPRESA.  Las copias de seguridad o backups que sean necesarios, solo podrán 
+                                ser efectuados por el encargado de sistemas, con autorización de la Gerencia General.</li><br/>
+                                <li> Queda prohibida la instalación de cualquier clase de aplicación o programa en las computadoras por parte de EL (AL) 
+                                TRABAJADOR (A), las cuales deberán ser efectuadas por el departamento de sistemas.   Asimismo, queda prohibido a EL (LA) 
+                                TRABAJADOR (A) dar de alta cuenta de correo o cuentas de acceso a internet, ya sean particulares o de LA EMPRESA.<br/>
+                                La suscripción del presente documento por parte de EL (LA) TRABAJADOR (A) y el uso que haga de los medios informáticos, 
+                                comunicaciones de LA EMPRESA, significará la aceptación integra de todas las condiciones en la presente cláusula.</li><br/>
+                                <li> Del acceso a dispositivos de almacenamiento extraíbles.- Como USB, CD, DVD, otros, se encuentran totalmente 
+                                prohibidos el uso de los mismos, por tanto, el acceso a los mismos se encuentra deshabilitado.</li><br/>
+                                <li> De los equipos Celulares, Laptop, Cámaras y/u otros asignados.- </li><br/>
+                                    <ol style="list-style-type: none;">
+                                        <li>c1. El Equipo y/o Chip de Celular que EL TRABAJADOR recibe, es “DE y PARA” USO EXCLUSIVO de las comunicaciones 
+                                        relacionadas a las actividades de LA EMPRESA. </li><br/>
+                                        <li>c2. El Registro y Manejo de la Información Contenida en el Equipo y Chip de Teléfono Celular es de Propiedad de 
+                                        LA EMPRESA, por tanto, la misma puede ser objeto de revisión y/o auditoría en cualquier momento sin previo aviso.
+                                        Pudiendo verificarse y facturarse AL TRABAJADOR el registro de llamadas no relacionadas con las labores de LA EMPRESA.</li><br/>
+                                        <li>c3. El Registro y Manejo de la Información Contenida en el Equipo y Chip de Teléfono Celular es de Propiedad 
+                                        de LA EMPRESA, por tanto, la misma puede ser objeto de revisión y/o auditoría en cualquier momento sin previo 
+                                        aviso.  Pudiendo verificarse y facturarse AL TRABAJADOR el registro de llamadas no relacionadas con las labores 
+                                        de LA EMPRESA.</li><br/>
+                                    </ol>
+                            </ol>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DÉCIMA. -  CONFIDENCIALIDAD DE LA INFORMACIÓN    </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            Se estipula por escrito que EL TRABAJADOR, sabe, conoce, tiene derecho y ha comprendido por escrito y textualmente 
+                            las Normas Internas de la Empresa y sabe que “DEBE DE” proteger, salvaguardar, velar y mantener <u><strong>absoluta 
+                            CONFIDENCIALIDAD, PRIVACIDAD y LEALTAD</strong></u> a LA EMPRESA con todo el manejo de la información y documentación 
+                            recibida y enviada vía email, escrita, referida a la Cartera de Clientes de la empresa, Proveedores, Tarifas, 
+                            Contratos, Negociaciones y todo aquel trato económico y/o comercial que aplique a la Gestión comercial, Imagen 
+                            Corporativa, Financiera de Compra y Venta de la empresa y empresas relacionadas a INDUSTRIES OIL AND MINING SAC, 
+                            datos que por ningún motivo, ni bajo ninguna circunstancia podrán ser divulgadas y/o expuestos de manera interna 
+                            y/o externa por EL TRABAJADOR, antes, durante o después de su Cese de la empresa. La omisión y ejecución de lo 
+                            antes reportado en esta Clausula y la FALTA de lealtad y privacidad de las mismas, será considerado como Faltas Graves 
+                            y se procederá con el Cese y retiro inmediato de EL EMPLEADO en sus funciones y se tomarán las medidas Jurídico-Legales 
+                            hacia EL EMPLEADO.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DÉCIMO PRIMERA. -  IMAGEN CORPORATIVA</strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            El TRABAJADOR deberá vestir y utilizar de manera pulcra y adecuada, asegurando y manteniendo de manera 
+                            responsable e idónea la Imagen Corporativa de LA EMPRESA. Tampoco no debe de hacer uso de la imagen Corporativa 
+                            fuera del horario de trabajo; Ni deberá lucir en eventos, reuniones y/u otras actividades no asociadas a la razón 
+                            de ser de sus funciones y labores asignadas por LA EMPRESA.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DÉCIMO SEGUNDA. -  DEL USO DE UNIDADES DE TRANSPORTE </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            El Trabajador administrativo o de campo Auxiliares de Despacho, está totalmente prohibido de hacer uso de unidades 
+                            de transporte para su movilización a operaciones de campo, dentro de horario de trabajo, ya sea que esta figura se 
+                            diera como copiloto o piloto o acompañante; siempre y cuando esta función no aplique a la razón de ser del servicio 
+                            para el cuál fue contratado.La falta de cumplimiento a lo reportado en esta cláusula décimo tercera, es CAUSAL de 
+                            DESPIDO inmediato, motivo por el cual el Trabajador o Empleado, acepta y autoriza en este documento de manera escrita 
+                            su despido y retiro inmediato de sus labores formalmente, sin perjuicio alguno para la EMPRESA.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DÉCIMO TERCERA. - DE LOS DOCUMENTOS </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            EL TRABAJADOR tiene la obligación de brindar toda la documentación solicitada al momento de su contratación y 
+                            durante su permanencia en la empresa, tales como Certificados de Antecedentes Penales y Policiales, los mismos 
+                            que EL TRABAJADOR tiene la obligación de mantener actualizados sin ningún perjuicio económico para LA EMPRESA; 
+                            asimismo, EL TRABAJADOR deberá cumplir con la entrega de documentos en copia de DNI, FOTO tipo carne actualizada, 
+                            recibos de servicios de domicilio, croquis actualizado de domicilio, otros documentos que fueran solicitados al 
+                            momento de su contratación, en caso EL TRABAJADOR incumpliera con la entrega puntual de los documentos solicitados 
+                            dentro de los plazos establecidos, esta será considerada una FALTA GRAVE, que aplicará a un memorándum, y en el caso 
+                            de mantenerse en la falta de incumplimiento de entrega de documentos, será motivo de desvinculación laboral inmediata. 
+                            Asimismo, el trabajador cumplirá con presentar documentos actualizados anualmente como Antecedentes Penales y 
+                            Policiales sin perjuicio económico alguno para la empresa y será parte de la actualización de datos necesarios y 
+                            exigibles para su file personal y continuidad laboral.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DÉCIMO CUARTA. - DE RESPONSABILIDADES DEL EMPLEADO</strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            EL TRABAJADOR “debe de” cumplir con todas las funciones escritas y no escritas que forman parte de sus labores e inducción 
+                            al puesto laboral que ocupa, así como “debe de” cumplir con las obligaciones que se le asignen para el buen desempeño 
+                            de su trabajo, a tiempo, con presentación de reportes escritos diarios, mensuales, semanales y brindar comunicaciones 
+                            oportunas a la Gerencia para la toma de decisiones; es obligación de EL TRABAJADOR mantenerse actualizado con las normas 
+                            Legales y Tributarias, así como adquirir habilidades y actualizarse continuamente en el manejo de software Contables, 
+                            Financieros y de Excel y otros que sean necesarios e indispensables para el buen manejo de sus labores y desarrollo de 
+                            su trabajo y análisis Contable y Financiero; proteger la imagen institucional de LA EMPRESA; velar a cabalidad y 
+                            responsablemente por proteger los intereses económicos de LA EMPRESA, siendo responsable solidario de todo daño o 
+                            perjuicio ocasionado por su persona o la falta de cumplimiento de sus labores, funciones y responsabilidades sobre el 
+                            puesto asignado. LA EMPRESA puede apoyar a EL TRABAJADOR con el prestamos de los cursos o software que desee tomar EL 
+                            TRABAJADOR como parte de la implementación, capacitación y mejora de sus habilidades cognitivas, siendo dichos costos y 
+                            gastos descontados a EL TRABAJADOR en dos quincenas, según corresponda, previa aceptación y aprobación de La Gerencia de 
+                            LA EMPRESA, a aceptar brindar el préstamo solicitado por el trabajador para dichos fines, LA EMPRESA tiene la potestad de 
+                            evaluar dicho requerimiento en base a las competencias y evaluaciones positivas de mejora continua que presente EL 
+                            TRABAJADOR como compromiso integro, y honesto de trabajo hacia LA EMPRESA.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DECIMO QUINTA. – DE PENALIDAD </strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            Si EL TRABAJADOR incumple la cláusula décima del presente contrato, pagará una penalidad de S/. 30,000.00 (Treinta Mil 
+                            y 00/100 Nuevos Soles) por <strong>DAÑOS Y PERJUICIOS</strong> (daño extra patrimonial y patrimonial-daño emergente y lucro cesante) y/o 
+                            EL TRABAJADOR autoriza a LA EMPRESA a retener el monto permitido por ley de la Liquidación por Despido y/o por 
+                            Renuncia Voluntaria, el pago por el servicio prestado.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DECIMO SEXTA. - REGIMEN LABORAL</strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            EL (LA) TRABAJADOR (A) estará sujeto al régimen laboral de la actividad privada, en consecuencia, en todo aquello no 
+                            previsto en el presente contrato, serán aplicables las disposiciones legales vigentes en materia laboral.
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            <strong>CLAUSULA DECIMO SEPTIMA. - DOMICILIO Y JURISDICCIÓN APLICABLE</strong>
+                        </p>
+                        <p class="parrafo-estilo-contract">
+                            Las partes señalan que en caso de controversias originadas por el presente contrato se someten a la jurisdicción 
+                            de los Jueces y Cortes de Lima, teniendo como válidos los domicilios indicados en la parte introductoria del 
+                            presente documento.<br/><br/>
+                            EL TRABAJADOR acepta y declara haber leído detenidamente y a cabalidad cada uno de los párrafos y cláusulas 
+                            de este Contrato y ha entendido y comprendido su responsabilidad y compromiso con LA EMPRESA motivo por el cual, 
+                            acepta las condiciones y firma cada una de las hojas de este Contrato con su firma original y huella dactilar, 
+                            dando fe que está de acuerdo y conforme con todo lo establecido en este documento. Asimismo, acepta que este 
+                            Contrato puede aplicar modificaciones que serán comunicadas de manera oportuna y adjunta como ADENDAS numeradas 
+                            a su Contrato y que forman parte de las condiciones de su vínculo laboral con LA EMPRESA.<br/><br/>
+                            En fe de lo cual suscriben ambas partes de común acuerdo el día 
+                            <strong> <t t-esc='employee.date_signature_text'/> </strong>
+                            .
+                        </p>
+                    
+                        <p class="parrafo-estilo-contract">
+                            <br/><br/><br/><br/><br/>
+                            <table style="margin-right: 20px; margin-left: 60px;">
+                                <tr style="text-align: left">
+                                    <td style="text-align: center; width:33.33%">…………………………………………………</td>
+                                    <td style="text-align: center; width:33.33%">…………………………………………………</td>
+                                </tr>
+                                <tr style="font-size: 10.5pt; text-align:rigth">
+                                    <td style="text-align: center; width:33.33%">
+                                        EL TRABAJADOR<br/>
+                                        <strong> <t t-esc='employee.employee_id.name'/> </strong><br/>
+                                        <strong> DNI N° <t t-esc='employee.employee_id.identification_id'/> </strong>
+                                    </td>
+                                    <td style="text-align: center; width:33.33%">LA EMPRESA</td>
+                                </tr>
+                            </table>
+                        </p>
+                    
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

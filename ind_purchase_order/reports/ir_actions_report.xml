@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_oc_xlsx" model="ir.actions.report">
+        <field name="name">Reporte de OC</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">ind_purchase_order.report_oc</field>
+        <field name="report_file">ind_purchase_order.report_oc</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_type">report</field>
+        <field name="attachment_use" eval="False"/>
+    </record>
+
+</odoo>

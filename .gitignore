@@ -1,0 +1,50 @@
+# Compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de entorno virtual (si lo tienes dentro del proyecto)
+venv/
+.env/
+*.env
+
+# Archivos temporales de Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.Zone.Identifier
+
+# Archivos temporales y de backup
+*.bak
+*.tmp
+*.swp
+*.swo
+*.~*
+
+# Configuraciones de IDEs y editores
+.vscode/
+.idea/
+
+# Archivos de log
+*.log
+
+# Archivos de cache
+*.cache
+*.egg-info/
+.eggs/
+.cache/
+
+# MacOS
+.DS_Store
+
+# Archivos de test coverage
+htmlcov/
+.tox/
+.coverage
+.pytest_cache/
+
+# Archivos de compilación
+build/
+dist/
+*.egg

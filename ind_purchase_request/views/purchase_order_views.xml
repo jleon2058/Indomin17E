@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ind_purchase_order_form" model="ir.ui.view">
+        <field name="name">purchase.order.view.form.inherit.ind_purchase_request</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button type="object"
+                    name="action_view_purchase_request"
+                    class="oe_stat_button"
+                    icon="fa-th-list" invisible="not purchase_request_related">
+                    <field name="rfq_related_count" widget="statinfo"
+                        help="Solicitudes de compra asociadas" />
+                </button>
+                <field name="purchase_request_related" invisible="1" />
+            </xpath>
+            <!-- Agregar campos a la vista -->
+            <xpath expr="//div[@name='reminder']" position="after">
+                <field name="date_picking" />
+                <field name="order_status" />
+            </xpath>
+
+            <xpath expr="//group/field[@name='currency_id']" position="after">
+                <field name="view_notes" />
+                <field name="inverse_rate" />
+                <field
+                    name="taxes_id"
+                    widget="many2many_tags"
+                    groups="ind_purchase_request.group_purchase_order_price"
+                />
+            </xpath>
+            <xpath expr="//field[@name='taxes_id']" position="after">
+                <field name="global_discount"/>
+            </xpath>
+            <xpath expr="//field[@name='global_discount']" position="after">
+                <field name="classification_rfq"/>
+                <!-- <field name="location_id"/> -->
+                <field name="ubication_id"/>
+                <field name="request_type"/>
+            </xpath>
+            <!-- Agregar atributos a la vista -->
+            <xpath expr="//field[@name='price_unit']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <!-- <xpath expr="//field[@name='discount']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath> -->
+            <!-- <xpath expr="//field[@name='tax_ids']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath> -->
+            <xpath expr="//field[@name='price_subtotal']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='tax_totals']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            
+            <xpath expr="//button[@name='button_approve']" position="after">
+              <button name="button_to_approve"
+                type="object"
+                invisible="state != 'draft'"
+                string = "Por aprobar"
+                class = "oe_highlight"
+                groups="ind_purchase_request.group_purchase_order_boss"
+                data-hotkey="z"
+                />
+            </xpath>
+            
+            <xpath expr="//button[@id='draft_confirm']" position="attributes">
+              <attribute name = "invisible"> 1 </attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='button_draft']" position="attributes">
+               <attribute name="groups">purchase.group_purchase_user,ind_purchase_request.group_purchase_order_boss</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='button_done']" position="attributes">
+              <attribute name = "groups"> 
+                  purchase.group_purchase_manager  
+              </attribute>
+            </xpath>
+
+            <xpath expr="//button[@id='bid_confirm']" position="attributes">
+              <attribute name = "invisible"> 1 </attribute>
+            </xpath>
+            
+            <!--
+            <xpath expr="//button[@id='draft_confirm']" position="attributes">
+              <attribute name = "invisible">
+                   state != 'to approve'
+              </attribute>
+            </xpath>
+
+            <xpath expr="//button[@id='draft_confirm']" position="attributes">
+              <attribute name = "groups">
+                   purchase.group_purchase_manager
+              </attribute>  
+            </xpath>
+             -->
+
+        </field>
+    </record>
+
+    <record id="ind_purchase_order_tree" model="ir.ui.view">
+        <field name="name">purchase.order.view.tree.inherit.ind_purchase_request</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_ids']" position="replace">
+                <field name="purchase_request_related" widget="many2many_tags" optional="show"
+                    readonly="1" />
+                <field name="order_status"
+                    widget="badge"
+                    decoration-success="order_status == 'almacen'"
+                    decoration-warning="order_status == 'pago'"
+                    decoration-info="order_status == 'transporte'"
+                    decoration-muted="order_status == 'proveedor'"
+                    decoration-danger="order_status == 'en_aprobacion'"
+                    optional="show"
+                />
+                <field name="invoice_ids" widget="many2many_tags" optional="show" readonly="1"
+                    domain="[('state', '=', 'posted')]" />
+            </xpath>
+
+            <!-- Agregar atributos -->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_supplier
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_total']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_kpis_tree" model="ir.ui.view">
+        <field name="name">purchase.order.view.kpis.tree.inherit.ind_purchase_request</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_ids']" position="replace">
+                <field name="purchase_request_related" widget="many2many_tags" optional="show"
+                    readonly='1' />
+                <field name="order_status"
+                    widget="badge"
+                    decoration-success="order_status == 'almacen'"
+                    decoration-warning="order_status == 'pago'"
+                    decoration-info="order_status == 'transporte'"
+                    decoration-muted="order_status == 'proveedor'"
+                    decoration-danger="order_status == 'en_aprobacion'"
+                    optional="show"
+                />
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_supplier
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_untaxed']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_total']" position="attributes">
+                <attribute name="groups">
+                    ind_purchase_request.group_purchase_order_price
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_view_search" model="ir.ui.view">
+        <field name="name">purchase.order.view.search.inherit.ind_purchase_request</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='order_date']" position="after">
+                <filter
+                    name="order_status"
+                    string="Estado de Pedido"
+                    icon="fa-user"
+                    domain="[]"
+                    context="{'group_by':'order_status'}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_filter" model="ir.ui.view">
+        <field name="name">purchase.order.view.filter.inherit.ind_purchase_request</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='order_date']" position="after">
+                <filter
+                    name="order_status"
+                    string="Estado de Pedido"
+                    icon="fa-user"
+                    domain="[]"
+                    context="{'group_by':'order_status'}"
+                />
+            </xpath>
+        </field>
+    </record>
+   <!-- Menu principal de indomin-->
+    <menuitem id="menu_purchase_form_indomin" parent="purchase.menu_purchase_root" name="Órdenes de compra" sequence='1'
+        groups="purchase.group_purchase_user,purchase.group_purchase_manager,ind_purchase_request.group_purchase_order_boss"/>
+
+    <!-- Menu para las ordenes sdp y sdp enviados-->
+    <record id="purchase_order_view_tree_draft_sent" model="ir.ui.view">
+            <field name="name">purchase.order.view.tree.draft.sent</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state == 'cancel'"
+                    decoration-info="invoice_status == 'to invoice'"
+                    string="Purchase Order"
+                    class="o_purchase_order"
+                    sample="1">
+                    <header>
+                        <button name="action_create_invoice" type="object" string="Create Bills"/>
+                    </header>
+                    <field name="priority" optional="show" widget="priority" nolabel="1"/>
+                    <field name="partner_ref" optional="hide"/>
+                    <field name="name" string="Reference" readonly="1" decoration-bf="1" decoration-info="state in ('draft','sent')"/>
+                    <field name="date_approve" widget="date" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                    <field name="partner_id" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" optional="show" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="!base.group_multi_company" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                    <field name="date_order" column_invisible="not context.get('quotation_only', False)" readonly="state in ['cancel', 'done', 'purchase']" optional="show"/>
+                    <field name="activity_ids" widget="list_activity" optional="show"/>
+                    <field name="state"/>
+                    <field name="origin" optional="show"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary" optional="hide"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary" optional="show" decoration-bf="1"/>
+                    <field name="currency_id" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="invoice_status" widget="badge" decoration-success="invoice_status == 'invoiced'" decoration-info="invoice_status == 'to invoice'" optional="show"/>
+                    <field name="date_planned" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="purchase_form_action_draft_sent" model="ir.actions.act_window">
+            <field name="name">Órdenes de compra en borrador</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('ind_purchase_request.purchase_order_view_tree_draft_sent')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+            ]"/>
+            <field name="domain">[('state','in',('draft','sent'))]</field>
+            <field name="search_view_id" ref="purchase_order_view_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+              </p><p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn into a purchase order.
+              </p>
+            </field>
+    </record>
+    
+    <menuitem action="purchase_form_action_draft_sent" id="menu_purchase_form_action_draft_sent" parent="menu_purchase_form_indomin" sequence="1"
+        groups="purchase.group_purchase_user,purchase.group_purchase_manager,ind_purchase_request.group_purchase_order_boss"/>
+    
+    <!-- Menu para las ordenes por aprobar-->
+    <record id="purchase_order_view_tree_to_approve" model="ir.ui.view">
+            <field name="name">purchase.order.view.tree.to.approve</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state == 'cancel'"
+                    decoration-info="invoice_status == 'to invoice'"
+                    string="Purchase Order"
+                    class="o_purchase_order"
+                    sample="1">
+                    <header>
+                        <button name="action_create_invoice" type="object" string="Create Bills"/>
+                    </header>
+                    <field name="priority" optional="show" widget="priority" nolabel="1"/>
+                    <field name="partner_ref" optional="hide"/>
+                    <field name="name" string="Reference" readonly="1" decoration-bf="1" decoration-info="state in ('draft','sent')"/>
+                    <field name="date_approve" widget="date" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                    <field name="partner_id" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" optional="show" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="!base.group_multi_company" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                    <field name="date_order" column_invisible="not context.get('quotation_only', False)" readonly="state in ['cancel', 'done', 'purchase']" optional="show"/>
+                    <field name="activity_ids" widget="list_activity" optional="show"/>
+                    <field name="origin" optional="show"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary" optional="hide"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary" optional="show" decoration-bf="1"/>
+                    <field name="currency_id" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="state" column_invisible="True"/>
+                    <field name="invoice_status" widget="badge" decoration-success="invoice_status == 'invoiced'" decoration-info="invoice_status == 'to invoice'" optional="show"/>
+                    <field name="date_planned" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="purchase_form_action_to_approve" model="ir.actions.act_window">
+            <field name="name">Órdenes de compra por aprobar</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('ind_purchase_request.purchase_order_view_tree_to_approve')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+            ]"/>
+            <field name="domain">[('state','=','to approve')]</field>
+            <field name="search_view_id" ref="purchase_order_view_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+              </p><p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn into a purchase order.
+              </p>
+            </field>
+    </record>
+    
+    <menuitem action="purchase_form_action_to_approve" id="menu_purchase_form_action_to_approve" parent="menu_purchase_form_indomin" sequence="2"
+        groups="purchase.group_purchase_user,purchase.group_purchase_manager,ind_purchase_request.group_purchase_order_boss"/>
+    
+    <!-- Menu para las ordenes aprobadas-->
+    <record id="purchase_order_view_tree_approve" model="ir.ui.view">
+            <field name="name">purchase.order.view.tree.approve</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state == 'cancel'"
+                    decoration-info="invoice_status == 'to invoice'"
+                    string="Purchase Order"
+                    class="o_purchase_order"
+                    sample="1">
+                    <header>
+                        <button name="action_create_invoice" type="object" string="Create Bills"/>
+                    </header>
+                    <field name="priority" optional="show" widget="priority" nolabel="1"/>
+                    <field name="partner_ref" optional="hide"/>
+                    <field name="name" string="Reference" readonly="1" decoration-bf="1" decoration-info="state in ('draft','sent')"/>
+                    <field name="date_approve" widget="date" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                    <field name="partner_id" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" optional="show" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="!base.group_multi_company" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                    <field name="date_order" column_invisible="not context.get('quotation_only', False)" readonly="state in ['cancel', 'done', 'purchase']" optional="show"/>
+                    <field name="activity_ids" widget="list_activity" optional="show"/>
+                    <field name="origin" optional="show"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary" optional="hide"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary" optional="show" decoration-bf="1"/>
+                    <field name="currency_id" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="state" column_invisible="True"/>
+                    <field name="invoice_status" widget="badge" decoration-success="invoice_status == 'invoiced'" decoration-info="invoice_status == 'to invoice'" optional="show"/>
+                    <field name="date_planned" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="purchase_form_action_approve" model="ir.actions.act_window">
+            <field name="name">Órdenes de compra aprobadas</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('ind_purchase_request.purchase_order_view_tree_approve')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+            ]"/>
+            <field name="domain">[('state','=','purchase')]</field>
+            <field name="search_view_id" ref="purchase_order_view_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+              </p><p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn into a purchase order.
+              </p>
+            </field>
+    </record>
+    
+    <menuitem action="purchase_form_action_approve" id="menu_purchase_form_action_approve" parent="menu_purchase_form_indomin" sequence="3"
+        groups="purchase.group_purchase_user,purchase.group_purchase_manager,ind_purchase_request.group_purchase_order_boss"/>
+
+    <!-- Menu para las ordenes bloqueadas y canceladas-->
+    <record id="purchase_order_view_tree_done_cancel" model="ir.ui.view">
+            <field name="name">purchase.order.view.tree.done.cancel</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state == 'cancel'"
+                    decoration-info="invoice_status == 'to invoice'"
+                    string="Purchase Order"
+                    class="o_purchase_order"
+                    sample="1">
+                    <header>
+                        <button name="action_create_invoice" type="object" string="Create Bills"/>
+                    </header>
+                    <field name="priority" optional="show" widget="priority" nolabel="1"/>
+                    <field name="partner_ref" optional="hide"/>
+                    <field name="name" string="Reference" readonly="1" decoration-bf="1" decoration-info="state in ('draft','sent')"/>
+                    <field name="date_approve" widget="date" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                    <field name="partner_id" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" optional="show" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="company_id" groups="!base.group_multi_company" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                    <field name="date_order" column_invisible="not context.get('quotation_only', False)" readonly="state in ['cancel', 'done', 'purchase']" optional="show"/>
+                    <field name="activity_ids" widget="list_activity" optional="show"/>
+                    <field name="state"/>
+                    <field name="origin" optional="show"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary" optional="hide"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary" optional="show" decoration-bf="1"/>
+                    <field name="currency_id" column_invisible="True" readonly="state in ['cancel', 'done', 'purchase']"/>
+                    <field name="invoice_status" widget="badge" decoration-success="invoice_status == 'invoiced'" decoration-info="invoice_status == 'to invoice'" optional="show"/>
+                    <field name="date_planned" column_invisible="context.get('quotation_only', False)" optional="show"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="purchase_form_action_done_cancel" model="ir.actions.act_window">
+            <field name="name">Órdenes de compra canceladas y bloqueadas</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar,activity</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('ind_purchase_request.purchase_order_view_tree_done_cancel')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('purchase.purchase_order_view_kanban_without_dashboard')}),
+            ]"/>
+            <field name="domain">[('state','in',('done','cancel'))]</field>
+            <field name="search_view_id" ref="purchase_order_view_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No purchase order found. Let's create one!
+              </p><p>
+                Once you ordered your products to your supplier, confirm your request for quotation and it will turn into a purchase order.
+              </p>
+            </field>
+    </record>
+    
+    <menuitem action="purchase_form_action_done_cancel" id="menu_purchase_form_action_done_cancel" parent="menu_purchase_form_indomin" sequence="4"
+        groups="purchase.group_purchase_user,purchase.group_purchase_manager,ind_purchase_request.group_purchase_order_boss"/>
+
+
+</odoo>

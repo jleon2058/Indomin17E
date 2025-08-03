@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consumption_analysis_wizard,access_consumption_analysis_wizard,model_consumption_analysis_wizard,ind_reporte_consumos.res_group_consumption_report_user,1,1,1,1

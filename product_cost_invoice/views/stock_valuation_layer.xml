@@ -1,0 +1,23 @@
+<odoo>
+    <!-- <record id="view_svl_inherit_tree_date" model="ir.ui.view">
+        <field name="name">view.svl.inherit.tree.date</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stock_move_id']" position="after">
+                <field name="my_custom_create_date"/>
+            </xpath>
+        </field>
+    </record> -->
+
+    <record id="view_svl_inherit_from_date" model="ir.ui.view">
+        <field name="name">view.svl.inherit.from.date</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stock_move_id']" position="after">
+                <field name="my_custom_create_date"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

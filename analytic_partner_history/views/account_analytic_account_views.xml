@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_analytic_account_form_custom" model="ir.ui.view">
+        <field name="name">Custom Analytic Account Form</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet/div[2]" position="replace">
+                <div>
+                    <label for="name"/>
+                    <h2>
+                        <field
+                            name="name"
+                            style="white-space: normal; word-wrap: break-word; max-width: none; width: 100%;"
+                            placeholder="e.g. Project XYZ"/>
+                    </h2>
+                </div>
+                <br/>
+            </xpath>
+
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button
+                    class="oe_stat_button"
+                    type="object"
+                    icon="fa-map-marker"
+                    name="action_open_partner_history"
+                >
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_text">Historial de Ubicaciones</span>
+                        <span class="o_stat_value">
+                            <field name="partner_history_count">
+                            </field>
+                        </span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='plan_id']" position="after">
+                <!-- <field name="location_id" /> -->
+                <field name="ubication_id" placeholder="Seleccione una ubicación" />
+            </xpath>
+
+            <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

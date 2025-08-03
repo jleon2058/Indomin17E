@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="location_mining_action" model="ir.actions.act_window">
+        <field name="name">Ubicaciones</field>
+        <field name="res_model">analytic.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="location_mining_menu"
+        parent="account.menu_analytic_accounting"
+        action="location_mining_action"
+        groups="analytic.group_analytic_accounting"
+        sequence="3"
+    />
+</odoo>

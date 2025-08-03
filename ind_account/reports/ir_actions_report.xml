@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_print_report_account_move_line" model="ir.actions.report">
+        <field name="name">Imprimir Asiento Contable</field>
+        <field name="binding_model_id" ref="model_account_move" />
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ind_account.report_general_entry_document</field>
+        <field name="report_file">ind_account.report_general_entry_document</field>
+        <field name="print_report_name">'Asiento - %s' % (object.name)</field>
+    </record>
+
+</odoo>

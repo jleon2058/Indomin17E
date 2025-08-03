@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+ind_purchase_order.access_report_volume_approved_wizard,access.report.volume.approved.wizard,model_report_volume_approved_wizard,purchase.group_purchase_user,1,1,1,1
+ind_purchase_order.access_report_purchase_order_wizard,access.report.purchase.order.wizard,model_report_purchase_order_wizard,purchase.group_purchase_user,1,1,1,1
+ind_purchase_order.access_report_rfq_approved_wizard,acces.report.rfq.approved.wizard,model_report_rfq_approved_wizard,purchase.group_purchase_user,1,1,1,1
+ind_purchase_order.report.ind_purchase_order.report_oc,access.report.oc,model_report_ind_purchase_order_report_oc,purchase.group_purchase_user,1,1,1,1

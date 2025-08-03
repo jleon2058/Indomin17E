@@ -1,0 +1,72 @@
+/* Adenda pago diario */
+.header-addend-daily {
+    text-align: center;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.parrafo-estilo-addend-daily {
+    margin-right: 60px;
+    margin-left: 60px;
+    font-size: 11pt;
+    font-family: 'Arial';
+    text-align: justify;
+}
+.titulo-estilo-addend-daily {
+    margin-right: 60px;
+    margin-left: 60px;
+    font-size: 11pt;
+    font-family: 'Arial';
+    text-align: justify;
+    font-weight: bold;
+}
+
+/* Contrato */
+.parrafo-estilo-contract {
+    margin-right: 0px;
+    margin-left: 0px;
+    font-size: 9pt;
+    font-family: 'Arial';
+}
+
+.header-first-contract {
+    // display: none;
+    margin-top: 0px;
+    text-decoration: underline;
+    font-size: 10.5pt;
+    text-align: center;
+    page-break-before: always;
+}
+
+/* .header {
+    // display: none;
+    margin-top: 0px;
+    text-decoration: underline;
+    font-size: 10.5pt;
+    text-align: center;
+    page-break-before: always;
+} */
+
+.body-first-contract {
+    margin-top: 0;
+    text-align: justify;
+}
+
+.subrayado {
+    text-decoration: underline;
+}
+
+.header{
+    page-break-before: always;
+  }
+
+ol.custom-list {
+    list-style-type: lower-alpha; /* letras minúsculas */
+    font-size: 9pt;
+    font-family: 'Arial';
+  }
+ol.custom-list {
+    list-style-type: lower-alpha; /* letras minúsculas */
+    font-size: 9pt;
+    font-family: 'Arial';
+  }
