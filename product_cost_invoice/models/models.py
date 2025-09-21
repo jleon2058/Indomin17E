@@ -483,7 +483,11 @@ class AccountMove(models.Model):
                 })
                 logger.warning(valuation.unit_cost)
                 logger.warning(valuation.value)    
-                move = self.env['account.move'].search([('stock_move_id', '=', line.id),('state','=','posted'),('amount_total','!=',0)])
+                move = self.env['account.move'].search(
+                    [('stock_move_id', '=', line.id), ('state', '=', 'posted')],
+                    order="create_date asc",
+                    limit=1
+                )
                 logger.warning("-----logger move-----")
                 logger.warning(move)
                 move.button_draft()
@@ -684,7 +688,8 @@ class ProductTemplate(models.Model):
             line_ids = self.env['purchase.order.line'].search([('product_id', '=', producto),('company_id','=',company),('state','=','purchase')])
             move_lines_compra = self.env['stock.move'].search([('purchase_line_id', 'in', line_ids.ids),('state','=','done'),('date','>',move_date),('product_id','=',producto)])
             move_lines_ajuste = self.env['stock.move'].search([('product_id','=',producto),('location_id.usage','=','inventory'),('location_dest_id.usage','=','internal'),('state','=','done'),('date','>',move_date),('company_id','=',company)])
-            move_lines_comb = (move_lines_compra | move_lines_ajuste)
+            move_line_dev_csm = self.env['stock.move'].search([('product_id','=',producto),('location_id.usage','=','production'),('location_dest_id.usage','=','internal'),('state','=','done'),('date','>',move_date),('company_id','=',company)])
+            move_lines_comb = (move_lines_compra | move_lines_ajuste | move_line_dev_csm)
             move_lines = move_lines_comb.sorted(key=lambda x: (x.date,x.id))
             #move_lines = (move_lines_compra | move_lines_ajuste).sorted(key=lambda x: x.date)
 
@@ -809,19 +814,7 @@ class ProductTemplate(models.Model):
                 ('location_dest_id.usage','=','production')
             ])
 
-            movimientos_posteriores2=self.env['stock.move'].search([
-                ('product_id', '=', producto),
-                ('purchase_line_id', '=', False),
-                ('date', '>=', move_date),
-                ('state','=','done'),
-                ('id', 'not in', move_lines.ids),
-                ('company_id','=',company),
-                ('location_id.usage','=','production'),
-                ('location_dest_id.usage','=','internal')
-            ])
-
-            #raise UserError("¡Hubo un error! La condición no se cumplió.")
-            movimientos_posteriores = (movimientos_posteriores1 | movimientos_posteriores2).sorted(key=lambda x: x.date)
+            movimientos_posteriores = (movimientos_posteriores1).sorted(key=lambda x: x.date)
 
             logger.warning("------Movimientos posterior--------")
             logger.warning(movimientos_posteriores)

@@ -1,5 +1,7 @@
-from odoo import fields, models
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+import logging
+logger = logging.getLogger(__name__)
 
 
 class AccountMoveLine(models.Model):
@@ -18,6 +20,25 @@ class AccountMoveLine(models.Model):
         default=False,
         required=True
     )
+    manual_credit = fields.Monetary(
+        string="credito manual",
+        currency_field="company_currency_id",store=True
+    )
+
+    manual_debit = fields.Monetary(
+        string="debito manual",
+        currency_field="company_currency_id",store=True
+    )
+
+    manual_balance = fields.Monetary(
+        string="manual balance",
+        currency_field="company_currency_id",store=True
+    )
+
+    manual_amount_currency = fields.Monetary(
+        string="manual monto linea",
+        currency_field="company_currency_id",store=True
+    )
 
     def validate_analytic_account(self):
         for line in self:    
@@ -29,6 +50,7 @@ class AccountMoveLine(models.Model):
         res.validate_analytic_account()
         return res
     
+    
     def _create_target_move_lines(self, debit_target_account_id, credit_target_account_id):
         self.ensure_one()
         line_data = {
@@ -37,6 +59,7 @@ class AccountMoveLine(models.Model):
             'partner_id': self.partner_id and self.partner_id.id or False,
             'currency_id': self.currency_id and self.currency_id.id or False,
             'is_target_move_line': True,
+            'move_id': self.move_id.id,
         }
         debit_data = dict(line_data)
         credit_data = dict(line_data)

@@ -59,8 +59,8 @@ class ReportVolumeApprovedWizard(models.TransientModel):
         if not purchase_orders:
             raise UserError('No se encontraron órdenes de compra aprobadas en el rango de fechas especificado.')
     
-        excel_file = ReportVolumeApprovedExcel(purchase_orders)
-        file_data = base64.b64encode(excel_file.get_content())
+        excel_file = ReportVolumeApprovedExcel(purchase_orders, self.env).get_content()
+        file_data = base64.b64encode(excel_file)
         self.write({'file_data': file_data})
         date_range = f"{self.date_start.strftime('%d-%m-%Y')}{self.date_end.strftime('%d-%m-%Y')}"
         url = '/web/content/?model=report.volume.approved.wizard&id={}&field=file_data&filename=COMPRAS_APROBADAS_{}&download=true'.format(self.id, date_range)

@@ -96,6 +96,11 @@
             <xpath expr="//button[@id='bid_confirm']" position="attributes">
               <attribute name = "invisible"> 1 </attribute>
             </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                <attribute name="required">1</attribute>
+                <attribute name="readonly">state in ('purchase','to approve','done','cancel')</attribute>
+            </xpath>
             
             <!--
             <xpath expr="//button[@id='draft_confirm']" position="attributes">
@@ -455,5 +460,27 @@
     <menuitem action="purchase_form_action_done_cancel" id="menu_purchase_form_action_done_cancel" parent="menu_purchase_form_indomin" sequence="4"
         groups="purchase.group_purchase_user,purchase.group_purchase_manager,ind_purchase_request.group_purchase_order_boss"/>
 
+    <record id="action_approve_ordenes_compras" model="ir.actions.server">
+        <field name="name">Aprobar ordenes de compra</field>
+        <field name="model_id" ref="purchase_request.model_purchase_order"/>
+        <field name="binding_model_id" ref="purchase_request.model_purchase_order"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+            action = records.action_approve_compras()
+        </field>
+        <field name="groups_id" eval="[(6, 0, [ref('purchase.group_purchase_manager')])]"/>
+    </record>
 
+    <record id="action_bloquear_ordenes_compras" model="ir.actions.server">
+        <field name="name">Bloquear ordenes de compra</field>
+        <field name="model_id" ref="purchase_request.model_purchase_order"/>
+        <field name="binding_model_id" ref="purchase_request.model_purchase_order"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+            action = records.action_bloquear_compras()
+        </field>
+        <field name="groups_id" eval="[(6, 0, [ref('purchase.group_purchase_manager')])]"/>
+    </record>
 </odoo>

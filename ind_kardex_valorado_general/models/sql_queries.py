@@ -4,8 +4,8 @@ class SQLQueries:
         return """
             SELECT COALESCE(SUM(
                 CASE
-                    WHEN sl.usage != 'internal' AND sl.usage != 'view' AND sl2.usage = 'internal' THEN sm.product_uom_qty
-                    WHEN sl.usage = 'internal' AND sl2.usage != 'internal' AND sl2.usage != 'view' THEN -sm.product_uom_qty
+                    WHEN sl.usage != 'internal' AND sl.usage != 'view' AND sl2.usage = 'internal' THEN sm.quantity
+                    WHEN sl.usage = 'internal' AND sl2.usage != 'internal' AND sl2.usage != 'view' THEN -sm.quantity
                     ELSE 0
                 END
             ),0) AS resultante
@@ -122,7 +122,7 @@ class SQLQueries:
     @staticmethod
     def get_movimientos_query():
         return"""
-            SELECT sm.id, sm.product_id, sm.product_uom_qty, sm.price_unit, sm.location_id, sm.location_dest_id, 
+            SELECT sm.id, sm.product_id, sm.quantity, sm.price_unit, sm.location_id, sm.location_dest_id, 
                 pp.default_code, pt.name, sm.date, sl2.name AS location_name, sl1.name AS location_dest_name, 
                 sm.reference, sl1.usage AS usage_dest_id, sl2.usage AS usage_id, 
                 COALESCE(sm.precio_unit_asiento, 0) AS precio_unit_asiento, 

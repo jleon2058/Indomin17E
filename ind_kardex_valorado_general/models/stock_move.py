@@ -78,10 +78,10 @@ class StockMove(models.Model):
                 logger.warning("----else final-----")
                 logger.warning(record.monto_asiento)
 
-    @api.depends('monto_asiento', 'product_uom_qty')
+    @api.depends('monto_asiento', 'quantity')
     def calcular_precio_unitario(self):
         for record in self:
-            if record.monto_asiento and record.product_uom_qty:
-                record.precio_unit_asiento=round(record.monto_asiento/record.product_uom_qty,6)
+            if record.monto_asiento and record.quantity:
+                record.precio_unit_asiento=round(record.monto_asiento/record.quantity,6)
             else:
                 record.precio_unit_asiento = 0

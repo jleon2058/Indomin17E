@@ -335,8 +335,8 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
 
                         contador_registros+=1
 
-                        lista_clave_ordenada_location_id = ['date','tipo_doc','serie_albaran','numero_albaran','tip_tabla12','location_name','product_uom_qty','precio_unit_asiento','monto_asiento','nombre_cc','id','tipo_cambio']
-                        lista_clave_ordenada_location_dest_id = ['date','tipo_doc','serie_albaran','numero_albaran','tip_tabla12','location_dest_name','product_uom_qty','precio_unit_asiento','monto_asiento','nombre_cc','id','tipo_cambio']
+                        lista_clave_ordenada_location_id = ['date','tipo_doc','serie_albaran','numero_albaran','tip_tabla12','location_name','quantity','precio_unit_asiento','monto_asiento','nombre_cc','id','tipo_cambio']
+                        lista_clave_ordenada_location_dest_id = ['date','tipo_doc','serie_albaran','numero_albaran','tip_tabla12','location_dest_name','quantity','precio_unit_asiento','monto_asiento','nombre_cc','id','tipo_cambio']
                         logger.warning("---1 kardex---")
                         for l in results:
                     # product_nombre=l.get('name')
@@ -383,7 +383,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                                 if precio_unitario_sql_valor is not None and subtotal_sql_valor is not None and primer_tipo_cambio !=0:
                                     if self.check_dolares:
                                         precio_unitario_sql_valor = precio_unitario_sql_valor/primer_tipo_cambio
-                                        subtotal_sql_valor = precio_unitario_sql_valor*(l.get('product_uom_qty'))
+                                        subtotal_sql_valor = precio_unitario_sql_valor*(l.get('quantity'))
                             else:
                                 primer_tipo_cambio = 0
                                 precio_unitario_sql_valor = 0
@@ -393,7 +393,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                             data_diccionario = {
                                 'id':l.get('id'),
                                 'product_id':l.get('product_id'),
-                                'product_uom_qty':l.get('product_uom_qty'),
+                                'quantity':l.get('quantity'),
                                 'price_unit':l.get('price_unit'),
                                 'location_id':l.get('location_id'),
                                 'location_dest_id':l.get('location_dest_id'),
@@ -475,7 +475,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                                 'location_name':'',
                                 'location_dest_name':'',
                                 'numero_albaran':r.get('move_name'),
-                                'product_uom_qty':0,
+                                'quantity':0,
                                 'tipo_doc':'00',
                                 'tip_tabla12':'AJUSTE',
                                 # 'debit':r.get('debit'),
@@ -557,7 +557,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                                     # else:
                                     if clave!='nombre_cc' and clave!='id' and clave!='tipo_cambio' and clave!='precio_unit_asiento':
                                         worksheet.write(row, column, value,cell_format[content_format])
-                                    if clave == 'product_uom_qty':
+                                    if clave == 'quantity':
                                         cant_saldo=cant_saldo+value
                                         worksheet.write(row,column+6,cant_saldo,cell_format[content_format])
                                         cant_ingresa[column] = cant_ingresa.get(column, 0) + value
@@ -582,7 +582,7 @@ class DateReportWizard(models.TransientModel,Cellformato,SQLQueries):
                                     # else:
                                     if clave != 'nombre_cc' and clave!='id' and clave!='tipo_cambio' and clave!='precio_unit_asiento':
                                         worksheet.write(row, column+3, value,cell_format[content_format])
-                                    if clave == 'product_uom_qty':
+                                    if clave == 'quantity':
                                         cant_saldo=cant_saldo-value
                                         worksheet.write(row,column+6,cant_saldo,cell_format[content_format])
                                         cant_ingresa[column+3] = cant_ingresa.get(column+3, 0) + value

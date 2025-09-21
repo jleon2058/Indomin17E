@@ -1,5 +1,7 @@
 from odoo.tools.misc import xlsxwriter
 from io import BytesIO
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from pytz import timezone, UTC
 
 _RFQ_TYPE = {
     'programado': 'PREVENTIVO',
@@ -27,8 +29,9 @@ _ORDER_STATUS = {
 
 
 class ReportVolumeApprovedExcel:
-    def __init__(self, data):
+    def __init__(self, data, env):
         self.data = data
+        self.env = env
 
     def get_content(self):
         output = BytesIO()
@@ -50,9 +53,10 @@ class ReportVolumeApprovedExcel:
             'valign': 'vcenter',
             'font_size': 10,
         })
-        style_date = workbook.add_format({
+
+        style_datetime = workbook.add_format({
             'font_size': 10,
-            'num_format': 'dd/mm/yyyy',
+            'num_format': 'dd/mm/yyyy hh:mm',
             'align': 'center',
         })
 
@@ -85,11 +89,19 @@ class ReportVolumeApprovedExcel:
         ws.write(0, 11, 'Valor total', style_column)
         ws.freeze_panes(1, 0)
 
+        user_tz = self.env.user.tz or 'UTC'
+        local_tz = timezone(user_tz)
+
         for i, oc in enumerate(self.data, start=1):
             total_discount = 0.00
 
             for line in oc.order_line:
                 total_discount += round(((line.product_qty * line.price_unit) * (line.discount)/100),2)
+
+            date_value = oc.date_approve
+            if date_value:
+                date_value = UTC.localize(date_value).astimezone(local_tz)
+                date_value = date_value.replace(tzinfo=None)
             
             ws.write(i, 0, oc.name or '', style_content)
             ws.write(i, 1, oc.partner_id.vat or '', style_content)
@@ -98,7 +110,7 @@ class ReportVolumeApprovedExcel:
             ws.write(i, 4, oc.ubication_id.name or '', style_content)
             ws.write(i, 5, _RFQ_TYPE.get(oc.request_type, ''), style_content)
             ws.write(i, 6, _ORDER_STATUS.get(oc.order_status, ''), style_content)
-            ws.write(i, 7, oc.date_approve, style_date)
+            ws.write(i, 7, date_value, style_datetime)
             ws.write(i, 8, oc.payment_term_id.name or '', style_content)
             ws.write(i, 9, oc.currency_id.name or '', style_content)
             ws.write(i, 10, total_discount, style_number)

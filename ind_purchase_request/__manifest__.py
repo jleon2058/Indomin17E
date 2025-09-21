@@ -1,7 +1,7 @@
 {
     'name': 'Indomin - Solicitud de Compra',
     'author': 'Dany Chavez',
-    'version': '17.0.1.0.8',
+    'version': '17.0.1.1.8',
     'summary': 'Cambios aplicados para el módulo Purchase Request',
     'category': 'Purchase Management',
     'depends': [

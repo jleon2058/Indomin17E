@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models, Command
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError,UserError
 
 _ORDER_STATUS = [
     ('pago', 'Área de pago'),
@@ -168,11 +168,23 @@ class PurchaseOrder(models.Model):
         self.write({'state': 'to approve'})
         return {}
     
-    #def button_confirm(self):
-    #    self._purchase_request_line_check()
-    #    res = super().button_confirm()
-    #    self._purchase_request_confirm_message()
-    #    return res
+    def action_approve_compras(self):
+        for record in self:
+            if record.state=='to approve':
+                record.button_approve()
+            elif record.state=='purchase':
+                raise UserError(_('Hay ordenes que ya fueron aprobadas'))
+            else:
+                raise UserError(_('Hay ordenes no estan aprobado por la Jefatura de compras'))
+        return { 'type': 'ir.actions.act_window_close' }
+    
+    def action_bloquear_compras(self):
+        for record in self:
+            if record.state=='purchase':
+                record.button_done()
+            else:
+                raise UserError(_('las ordenes debe estar aprobadas para bloquearla'))
+        return { 'type': 'ir.actions.act_window_close' }
 
     def unlink(self):
         alloc_to_unlink = self.env["purchase.request.allocation"]

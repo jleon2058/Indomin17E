@@ -11,6 +11,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
+        'data/mail_template_data.xml',
         'wizards/report_purchase_order_views.xml',
         'wizards/report_volume_approved_views.xml',
         'wizards/report_rfq_approved_views.xml',
