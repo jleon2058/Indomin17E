@@ -12,20 +12,23 @@
         'purchase_stock',
         'account',
         'analytic',
-        'base'
+        'base',
+        'stock_analytic'
     ],
-    'data': [
-        'reports/ir_actions_report_templates.xml',
-        'reports/ir_actions_report.xml',
-        'wizards/purchase_request_line_make_purchase_order.xml',
-        'wizards/purchase_request_import_line.xml',
-        'views/purchase_order_line_views.xml',
-        'views/purchase_order_views.xml',
-        'views/purchase_request_line_views.xml',
-        'views/purchase_request_views.xml',
-        'security/purchase_request_security.xml',
-        'security/purchase_order_security.xml',
-        'security/ir.model.access.csv'
+    "data": [
+        "security/purchase_request_security.xml",
+        "security/purchase_order_security.xml",
+        "security/ir.model.access.csv",
+        "reports/ir_actions_report_templates.xml",
+        "reports/ir_actions_report.xml",
+        "wizards/purchase_request_import_line.xml",
+        "wizards/purchase_request_line_make_purchase_order.xml",
+        "views/account_payment_term_views.xml",
+        "views/purchase_order_line_views.xml",
+        "views/purchase_order_views.xml",
+        "views/purchase_request_line_views.xml",
+        "views/purchase_request_views.xml",
+        "views/stock_picking_views.xml",
     ],
     'assets': {
         'web.assets_backend': [

@@ -1,4 +1,4 @@
-from odoo import _, api, models
+from odoo import _, api, models,fields
 from odoo.exceptions import ValidationError
 from odoo.tools.float_utils import float_compare
 

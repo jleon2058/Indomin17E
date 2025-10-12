@@ -1,5 +1,8 @@
 from odoo import _, api, fields, models, Command
 from odoo.exceptions import ValidationError,UserError
+import logging
+
+logger = logging.getLogger(__name__)
 
 _ORDER_STATUS = [
     ('pago', 'Área de pago'),
@@ -234,4 +237,64 @@ class PurchaseOrder(models.Model):
         ])
         aml.write({'name': concatenated_names})
 
+        return result
+
+
+    payment_state = fields.Selection([
+        ('draft', 'Pendiente'),
+        ('paid', 'Pagado'),
+        ('rejected', 'Rechazado'),
+    ], string="Estado de Pago", tracking=True)
+
+    analytic_distribution_display = fields.Char(
+        string='Analytic Distribution',
+        compute='_compute_analytic_distribution_display',
+        store=True
+    )
+
+    @api.depends('order_line.analytic_distribution')
+    def _compute_analytic_distribution_display(self):
+        # Obtenemos el modelo de cuentas analíticas
+        CuentaAnalitica = self.env['account.analytic.account']
+        
+        for order in self:
+            # Usamos un conjunto para guardar IDs únicos de cuentas analíticas
+            ids_cuentas_analiticas = set()
+            
+            # Recopilamos TODOS los IDs de cuentas analíticas de TODAS las líneas
+            for linea in order.order_line:
+                if linea.analytic_distribution and isinstance(linea.analytic_distribution, dict):
+                    logger.info("--------Línea encontrada-------")
+                    logger.info(linea.analytic_distribution)
+                    
+                    # Extraemos los IDs de las cuentas (las claves del diccionario)
+                    ids_cuentas = [int(id_cuenta) for id_cuenta in linea.analytic_distribution.keys()]
+                    ids_cuentas_analiticas.update(ids_cuentas)
+            
+            logger.info("--------IDs de Cuentas Analíticas Recolectados-------")
+            logger.info(ids_cuentas_analiticas)
+            
+            if ids_cuentas_analiticas:
+                logger.info("--------if-------")
+
+                # Buscamos TODAS las cuentas analíticas de una sola vez
+                cuentas = CuentaAnalitica.browse(list(ids_cuentas_analiticas)).exists()
+                
+                # Extraemos los CÓDIGOS de las cuentas encontradas
+                codigos_cuentas = [cuenta.code for cuenta in cuentas if cuenta.code]
+                
+                # Unimos los códigos en un solo texto
+                order.analytic_distribution_display = ', '.join(codigos_cuentas) if codigos_cuentas else "Sin código analítico"
+                
+                logger.info("--------Valor Final para Mostrar-------")
+                logger.info(order.analytic_distribution_display)
+                    
+            else:
+                order.analytic_distribution_display = "Sin analítica"
+
+    def button_approve(self, force=False):
+        result = super(PurchaseOrder, self).button_approve(force=force)
+        for order in self:
+            if not order.payment_state:
+                order.payment_state = 'draft'
         return result

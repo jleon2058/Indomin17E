@@ -10,9 +10,11 @@ export class LocationAnalyticDistribution extends AnalyticDistribution {
     setup() {
         super.setup?.();
 
-        const location = this.props.record.data?.ubication_id[0];
-        const company = this.props.record.data?.company_id;
-        console.log("📍 Location (selection related):", location);
+        const rawUbication = this.props.record.data?.ubication_id;
+        const location = Array.isArray(rawUbication) ? rawUbication[0] : null;
+
+        const rawCompany = this.props.record.data?.company_id;
+        const company = Array.isArray(rawCompany) ? rawCompany[0] : null;
     }
     recordProps(line) {
         const analyticAccountFields = {
@@ -25,8 +27,11 @@ export class LocationAnalyticDistribution extends AnalyticDistribution {
     
         const recordFields = {};
         const values = {};
-        const location = this.props.record.data?.ubication_id[0];
-        const company = this.props.record.data?.company_id?.[0];
+        const rawUbication = this.props.record.data?.ubication_id;
+        const location = Array.isArray(rawUbication) ? rawUbication[0] : null;
+
+        const rawCompany = this.props.record.data?.company_id;
+        const company = Array.isArray(rawCompany) ? rawCompany[0] : null;
     
         line.analyticAccounts.forEach((account) => {
             const fieldName = `x_plan${account.planId}_id`;
