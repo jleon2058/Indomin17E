@@ -27,7 +27,6 @@
     'depends': [
         'base',
         'account',
-        #'ind_account'
     ],
     'data': [
         'views/account_move_views.xml',

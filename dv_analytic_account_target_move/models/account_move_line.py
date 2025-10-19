@@ -3,7 +3,6 @@ from odoo.exceptions import UserError
 import logging
 logger = logging.getLogger(__name__)
 
-
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
     
@@ -20,25 +19,6 @@ class AccountMoveLine(models.Model):
         default=False,
         required=True
     )
-    manual_credit = fields.Monetary(
-        string="credito manual",
-        currency_field="company_currency_id",store=True
-    )
-
-    manual_debit = fields.Monetary(
-        string="debito manual",
-        currency_field="company_currency_id",store=True
-    )
-
-    manual_balance = fields.Monetary(
-        string="manual balance",
-        currency_field="company_currency_id",store=True
-    )
-
-    manual_amount_currency = fields.Monetary(
-        string="manual monto linea",
-        currency_field="company_currency_id",store=True
-    )
 
     def validate_analytic_account(self):
         for line in self:    
@@ -50,7 +30,6 @@ class AccountMoveLine(models.Model):
         res.validate_analytic_account()
         return res
     
-    
     def _create_target_move_lines(self, debit_target_account_id, credit_target_account_id):
         self.ensure_one()
         line_data = {
@@ -61,33 +40,25 @@ class AccountMoveLine(models.Model):
             'is_target_move_line': True,
             'move_id': self.move_id.id,
         }
-        debit_data = dict(line_data)
-        credit_data = dict(line_data)
 
-        if self.debit != False:
-            debit_data.update(
-                account_id=debit_target_account_id.id,
-                debit=self.debit,
-                credit=False,
-                amount_currency=self.amount_currency,
-            )
-            credit_data.update(
-                account_id=credit_target_account_id.id,
-                debit=False,
-                credit=self.debit,
-                amount_currency=self.amount_currency * -1.0,
-            )
+        if self.debit > 0:
+            debit_data = dict(line_data, account_id=debit_target_account_id.id, debit=self.debit, credit=0.0, amount_currency=self.amount_currency)
+            credit_data = dict(line_data, account_id=credit_target_account_id.id, debit=0.0, credit=self.debit, amount_currency=-self.amount_currency if self.amount_currency else 0.0)
+        elif self.credit > 0:
+            debit_data = dict(line_data, account_id=debit_target_account_id.id, debit=0.0, credit=self.credit, amount_currency=self.amount_currency)
+            credit_data = dict(line_data, account_id=credit_target_account_id.id, debit=self.credit, credit=0.0, amount_currency=-self.amount_currency if self.amount_currency else 0.0)
         else:
-            debit_data.update(
-                account_id=debit_target_account_id.id,
-                debit=False,
-                credit=self.credit,
-                amount_currency=self.amount_currency,
-            )
-            credit_data.update(
-                account_id=credit_target_account_id.id,
-                debit=self.credit,
-                credit=False,
-                amount_currency=self.amount_currency * -1.0,
-            )
-        self.move_id.line_ids = [(0, 0, debit_data), (0, 0, credit_data)]
+            # No hay valores, no crear líneas
+            return
+
+        logger.info("----------valores------------")
+        logger.info("Creating target lines with these values:")
+        logger.info(f"Debit data: {debit_data}")
+        logger.info(f"Credit data: {credit_data}")
+
+        # Crear las líneas directamente:
+        created_lines = self.env['account.move.line'].create([debit_data, credit_data])
+        self.env.cr.flush()  # forzar escritura en bd
+
+        for line in created_lines:
+            logger.info(f"Created line {line.id}: debit={line.debit} credit={line.credit}")
