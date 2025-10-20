@@ -27,13 +27,19 @@
     'depends': [
         'base',
         'account',
+        'account_asset',
+        #'ind_account'
     ],
     'data': [
         'views/account_move_views.xml',
         'views/account_analytic_account_views.xml',
         'views/account_account_views.xml',
     ],
-
+    'assets': {
+        'web.assets_backend': [
+            'dv_analytic_account_target_move/static/src/js/custom_tax_totals_component.js',
+        ],
+    },
     'images': ['static/description/banner.gif'],
 
     'installable': True,
