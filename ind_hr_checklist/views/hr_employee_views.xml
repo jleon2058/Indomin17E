@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_form_with_checklist" model="ir.ui.view">
+        <field name="name">hr.employee.form.with.checklist</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Documentación">
+                    <field name="has_audit" invisible="1"/>
+                    <div class="mt-3 ">
+                        <div class="mb-3 mt-2">
+                            <button string="Registrar auditoría" class="btn btn-primary me-2" name="action_register_audit" type="object" icon="fa-check-square"/>
+                            <button name="action_open_employee_folder" icon="fa-folder-open" type="object" string="Ver documentos" class="btn btn-outline-secondary" groups="ind_hr_checklist.group_hr_employee_docs"/>
+                        </div>
+                        <div class="card border-0 shadow-sm" invisible="not has_audit">
+                            <div class="card-header bg-light border-0 p-2">
+                                <h6 class="mb-0 text-primary fw-bold">
+                                    <i class="fa fa-history me-2"/>Última auditoría
+                                </h6>
+                            </div>
+                            <div class="card-body p-2 pt-0" style="font-size:12px">
+                                <div class="row g-2">
+                                    <div class="col-md-3">
+                                        <div class="text-muted d-block mb-1">
+                                            <i class="fa fa-calendar me-1"/><label for="audit_date"/>
+                                        </div>
+                                        <field name="audit_date" readonly="1" nolabel="1"/>
+                                    </div>
+                                    <div class="col">
+                                        <div class="text-muted d-block mb-1">
+                                            <i class="fa fa-user me-1"/><label for="audit_user_id"/>
+                                        </div>
+                                        <field name="audit_user_id" readonly="1" options='{"no_open":true}' nolabel="1"/>
+                                    </div>                                    
+                                    <div class="col">
+                                        <div class="text-muted d-block mb-1">
+                                            <i class="fa fa-comment me-1"/><label for="audit_notes"/>
+                                        </div>
+                                        <field name="audit_notes" readonly="1" placeholder="Sin observaciones registradas" nolabel="1"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <group class="o_label_nowrap">
+                        <!-- 1. Documentación Personal -->
+                        <group string="1. Documentación Personal">
+                            <field name="has_worker_dni_copy" string="1.1 Copia de DNI vigente del trabajador" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <div invisible="not has_worker_dni_copy" colspan="2" style="padding-left: 20px; width:max-content;">
+                                <div class="d-flex justify-content-between">
+                                    <label for="worker_dni_expiration_date" class="mr16"/>
+                                    <field name="worker_dni_expiration_date" required="has_worker_dni_copy" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                            </div>
+                            <field name="has_family_dni_copy" string="1.2 Copia de DNI de hijos y/o cónyuge" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_address_proof_copy" string="1.3 Copia de recibo de servicios (domicilio actualizado)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_id_photo" string="1.4 Fotografía tamaño carnet (opcional)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_indomin_data_sheet" string="1.5 Ficha de Datos Indomin / Mecaparts" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_vida_ley_doc" string="1.6 Documento de Vida Ley Legalizado" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_domicile_affidavit" string="1.7 Declaración Jurada de Domicilio" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_fifth_income_statement" string="1.8 Declaración de Renta de Quinta" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_driver_license_copy" string="1.9 Copia de brevete o licencia de conducir (si aplica)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <div invisible="not has_driver_license_copy" colspan="2" style="padding-left: 20px; width:max-content;">
+                                <div class="d-flex justify-content-between">
+                                    <label for="driver_license_category" class="mr16"/>
+                                    <field name="driver_license_category" required="has_driver_license_copy" placeholder="p. ej. A-IIa, A-IIIb"/>
+                                </div>
+                                <div class="d-flex justify-content-between mt8">
+                                    <label for="driver_license_expiration_date" class="mr16"/>
+                                    <field name="driver_license_expiration_date" required="has_driver_license_copy" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                            </div>
+                        </group>
+
+                        <!-- 2. Documentación Laboral -->
+                        <group string="2. Documentación Laboral">
+                            <field name="has_signed_contract" string="2.1 Contrato de trabajo firmado" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_cv" string="2.2 Hoja de vida (CV) actualizada y documentada" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_truth_affidavit" string="2.3 Declaración jurada de veracidad de la información" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_criminal_background" string="2.4 Antecedentes penales/policiales (opcional)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_personal_data_sheet" string="2.5 Ficha de datos personales" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_starsoft_registration" string="2.6 Constancia de Alta en STARSOFT" widget="boolean_toggle" options="{'autosave':false}"/>
+                        </group>
+                    </group>
+
+                    <group class="o_label_nowrap">
+                        <!-- 3. Obligaciones Legales -->
+                        <group string="3. Obligaciones Legales">
+                            <field name="has_t_registry_registration" string="3.1 Registro en T-Registro (SUNAT)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_pension_system_selection" string="3.2 Elección del sistema previsional (ONP o AFP)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_sctr_coverage" string="3.3 Registro y cobertura del SCTR (si aplica)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_contract_submission_mtpe" string="3.4 Remisión del contrato al MTPE (si es plazo fijo)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_electronic_payslips" string="3.5 Entrega de boletas de pago electrónicas" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_salary_band_registration" string="3.6 Registro de la banda salarial del puesto" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_salary_scale_delivery" string="3.7 Entrega de la escala salarial y criterios de pago" widget="boolean_toggle" options="{'autosave':false}"/>
+                        </group>
+
+                        <!-- 4. Seguridad y Salud en el Trabajo -->
+                        <group string="4. Seguridad y Salud en el Trabajo">
+                            <field name="has_medical_exam_entry" string="4.1 Examen médico ocupacional de ingreso" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <div invisible="not has_medical_exam_entry" colspan="2" style="padding-left: 20px; width:max-content;">
+                                <div class="d-flex justify-content-between">
+                                    <label for="medical_exam_start_date" class="mr16"/>
+                                    <field name="medical_exam_start_date" required="has_medical_exam_entry" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                                <div class="d-flex justify-content-between mt8">
+                                    <label for="medical_exam_expiry_date" class="mr16"/>
+                                    <field name="medical_exam_expiry_date" required="has_medical_exam_entry" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                            </div>
+                            <field name="has_isem_exam" string="4.2 Examen ISEM (si aplica)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <div invisible="not has_isem_exam" colspan="2" style="padding-left: 20px; width:max-content;">
+                                <div class="d-flex justify-content-between">
+                                    <label for="isem_exam_start_date" class="mr16"/>
+                                    <field name="isem_exam_start_date" required="has_isem_exam" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                                <div class="d-flex justify-content-between mt8">
+                                    <label for="isem_exam_expiry_date" class="mr16"/>
+                                    <field name="isem_exam_expiry_date" required="has_isem_exam" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                            </div>
+                            <field name="has_driving_test" string="4.3 Examen de manejo (si aplica)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <div invisible="not has_driving_test" colspan="2" style="padding-left: 20px; width:max-content;">
+                                <div class="d-flex justify-content-between">
+                                    <label for="driving_test_start_date" class="mr16"/>
+                                    <field name="driving_test_start_date" required="has_driving_test" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                                <div class="d-flex justify-content-between mt8">
+                                    <label for="driving_test_expiry_date" class="mr16"/>
+                                    <field name="driving_test_expiry_date" required="has_driving_test" placeholder="p. ej. 01/01/1999"/>
+                                </div>
+                            </div>
+                            <field name="has_rit_delivery" string="4.4 Entrega y firma del RIT (si aplica)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_sst_policy_delivery" string="4.5 Entrega y firma de la Política de SST" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_sst_training" string="4.6 Capacitación en SST (firma de asistencia)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_epp_delivery_ack" string="4.7 Entrega de EPP y firma de conformidad" widget="boolean_toggle" options="{'autosave':false}"/>
+                        </group>
+                    </group>
+
+                    <group class="o_label_nowrap">
+                        <!-- 5. Prevención del Hostigamiento -->
+                        <group string="5. Prevención del Hostigamiento Sexual">
+                            <field name="has_harassment_protocol_delivery" string="5.1 Entrega de protocolo contra hostigamiento sexual" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_protocol_receipt_ack" string="5.2 Firma de constancia de recepción del protocolo" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_harassment_prevention_training" string="5.3 Capacitación en prevención del hostigamiento" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_rit_protocol_inclusion" string="5.4 Inclusión del protocolo en el RIT (si existe)" widget="boolean_toggle" options="{'autosave':false}"/>
+                        </group>
+
+                        <!-- 6. Otros Documentos Recomendables -->
+                        <group string="6. Otros Documentos">
+                            <field name="has_welcome_letter" string="6.1 Carta de bienvenida o designación formal del puesto" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_job_description" string="6.2 Manual de funciones y responsabilidades (MOF)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_confidentiality_agreement" string="6.3 Pacto de confidencialidad y/o no competencia (si aplica)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_tools_delivery_receipt" string="6.4 Constancia de entrega de herramientas o recursos" widget="boolean_toggle" options="{'autosave':false}"/>
+                        </group>
+                    </group>
+
+                    <group class="o_label_nowrap">
+                        <!-- 7. Documentos de Salida -->
+                        <group string="7. Documentos de Salida">
+                            <field name="has_resignation_letter" string="7.1. Carta de renuncia firmada (si aplica" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_sunat_deregistration" string="7.2. Registro de baja en SUNAT (T-Registro)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_resignation_acceptance" string="7.3. Carta de aceptación de renuncia o cese o Correo de aceptación de Jefatura" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_social_benefits_liquidation" string="7.4. Liquidación de beneficios sociales firmada" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_work_certificate" string="7.5. Certificado de trabajo emitida" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_cts_release_cert" string="7.6. Constancia de Liberacion de CTS" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_final_fifth_income_cert" string="7.7. Constancia de Renta de Quinta (Si aplica)" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_epp_return_act" string="7.8. Acta de devolución de EPP y herramientas" widget="boolean_toggle" options="{'autosave':false}"/>
+                            <field name="has_final_file_archive" string="7.9. Archivo final del legajo laboral" widget="boolean_toggle" options="{'autosave':false}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_employee_tree_checklist" model="ir.ui.view">
+        <field name="name">hr.employee.tree.with.checklist</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[1]" position="before">
+                <button name="action_report_document_checklist" icon="fa-certificate" string="Reporte de documentos" class="oe_highlight" type="object" groups="hr.group_hr_user"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
