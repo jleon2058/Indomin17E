@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_saleorder_document_inherit" inherit_id="sale.report_saleorder_document">
+            
+            <xpath expr="//div[@name='so_total_summary']" position="after">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <t t-set="bank_accounts" t-value="doc.get_company_bank_accounts()"/>
+                        <t t-if="bank_accounts">
+                            <div class="text-center" style="border-top: 1px solid #dee2e6; padding-top: 15px;">
+                                <h6 style="margin-bottom: 10px;"><strong>INFORMACIÓN DE CUENTAS BANCARIAS</strong></h6>
+                                <t t-foreach="bank_accounts" t-as="bank">
+                                    <div style="margin: 5px 0;">
+                                        <strong>
+                                            <span t-field="bank.bank_id.name"/>: 
+                                            <span t-field="bank.acc_number"/>
+                                        </strong>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </xpath>
+
+        </template>
+    </data>
+</odoo>
