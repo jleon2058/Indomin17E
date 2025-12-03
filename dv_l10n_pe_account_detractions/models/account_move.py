@@ -1,6 +1,7 @@
 from odoo import api, fields, models
 from odoo.exceptions import UserError
-
+import logging
+_logger=logging.getLogger(__name__)
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
@@ -60,12 +61,12 @@ class AccountMove(models.Model):
 
                 # Se cambio de para que la contrapartida de la cuenta de detracción , se obtenga desde las lineas y no desde el contacto
                 if move.move_type in ('in_invoice', 'in_refund', 'in_receipt'):
-                    payable_line = move.line_ids.filtered(lambda line: line.account_id.root_id.id == 52050 and not line.l10n_pe_is_detraction_line)
+                    payable_line = move.line_ids.filtered(lambda line: line.account_id.root_id.id == 52050 and not line.l10n_pe_is_detraction_line and line.account_id.account_type == 'liability_payable')
                     debit_account_id = payable_line.account_id.id
                     credit_account_id = move.company_id.detraction_account_id.id
 
                 if move.move_type in ('out_invoice', 'out_refund', 'out_receipt'):
-                    receivable_line = move.line_ids.filtered(lambda line: line.account_id.root_id.id == 52050 and not line.l10n_pe_is_detraction_line)
+                    receivable_line = move.line_ids.filtered(lambda line: line.account_id.root_id.id == 52050 and not line.l10n_pe_is_detraction_line and line.account_id.account_type == 'liability_payable')
                     debit_account_id = move.company_id.detraction_account_id.id
                     credit_account_id = receivable_line.account_id.id
 
@@ -86,3 +87,9 @@ class AccountMove(models.Model):
                 move.line_ids = [(0, 0, debit_data), (0, 0, credit_data)]
         res = super(AccountMove, self)._post(soft=soft)
         return res
+    
+    def button_draft(self):
+        _logger.info("----buton draft----")
+        super(AccountMove, self).button_draft()
+        lines = self.line_ids.filtered(lambda l: l.l10n_pe_is_detraction_line)
+        lines.with_context(check_move_validity=False).unlink()

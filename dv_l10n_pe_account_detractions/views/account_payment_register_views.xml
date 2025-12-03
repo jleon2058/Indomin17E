@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <odoo>
+      
+    <!-- View account.payment.register form -->
+    <record id="view_account_payment_register_detraction_form" model="ir.ui.view">
+        <field name="name">view.account.payment.register.detraction.form</field>
+        <field name="model">account.payment.register</field>
+        <field name="inherit_id" ref="account.view_account_payment_register_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//label[@for='amount']" position="attributes">
+            <attribute name="invisible">can_edit_wizard and not group_payment</attribute>
+          </xpath>
+          <xpath expr="//div[@name='amount_div']" position="attributes">
+            <attribute name="invisible">can_edit_wizard and not group_payment</attribute>
+          </xpath>
+          <xpath expr="//field[@name='communication']" position="attributes">
+            <attribute name="invisible">can_edit_wizard and not group_payment</attribute>
+          </xpath>
+          <xpath expr="//field[@name='communication']" position="attributes">
+            <attribute name="invisible">can_edit_wizard and not group_payment</attribute>
+          </xpath>
+          <xpath expr="//field[@name='group_payment']" position="attributes">
+            <attribute name="invisible">1</attribute>
+          </xpath>
+          <xpath expr="//field[@name='group_payment']" position="after">
+            <field name="has_detraction_lines" invisible="1"/>
+            <field name="is_detraction_pay" invisible="not has_detraction_lines"/>
+          </xpath>
+          <xpath expr="//field[@name='communication']" position="after">
+            <field name="detraction_number" invisible="not is_detraction_pay" required="is_detraction_pay"/>
+            <field name="detraction_date" invisible="not is_detraction_pay" required="is_detraction_pay"/>
+          </xpath>
+        </field>
+    </record>
+
+  </odoo>

@@ -41,6 +41,7 @@
         'views/res_config_settings_views.xml',
         'views/drawdown_tax_table_views.xml',
         'views/menu_item_views.xml',
+        'views/account_payment_register_views.xml',
         'security/ir.model.access.csv',
     ],
     
